@@ -1,9 +1,9 @@
 # Guía de utilización del programa
 
 ## 1. Descarga
-  a) Del repositorio descargar los archivos en formato .zip
-  b) Moverlos a la carpeta donde se quiera guardar
-  c) Descomprimir el .zip que se descargó en esa misma carpeta
+  - Del repositorio descargar los archivos en formato .zip
+  - Moverlos a la carpeta donde se quiera guardar
+  - Descomprimir el .zip que se descargó en esa misma carpeta
   
 ## 2. Instalación
   Una vez que se tienen los archivos correspondientes y se encuentra en la carpeta donde estan dichos archivos, 
