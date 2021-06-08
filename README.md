@@ -9,12 +9,12 @@
   Una vez que se tienen los archivos correspondientes y se encuentra en la carpeta donde estan dichos archivos, 
   se pasa a la ejecución del script de instalación **sotp1.sh**, que se encuentra en la carpeta **sisop**. Para
   la ejecución del mismo se debe hacer:
-
-    a) Abrir la terminal
-    b) Ir hasta la carpeta donde esta el script de instalación: 
-         cd $GRUPO/sisop
-    c) Ejecutar el script de instalación:
-         ./sotp1.sh
+  
+  a) Abrir la terminal
+  b) Ir hasta la carpeta donde esta el script de instalación: 
+         ``cd $GRUPO/sisop``
+  c) Ejecutar el script de instalación:
+         ``./sotp1.sh``
          
   Al ejecutar el script se tendrán que definir los directorios donde se quieran guardar ciertos archivos, por eso
   en cada caso se muestra un directorio por default y luego se podrá escribir el directorio que se requiera, tener
@@ -47,12 +47,12 @@
   Para la ejecución del programa, primero lo que se necesita es que el ambiente quede bien definido y para que esto
   suceda se deberá ejecutar lo siguiente
   
-      a) Como se está en el directorio $GRUPO/sisop, se debe volver al inicio
-          cd ..
-      b) Luego ir hasta la carpeta donde se encuentran todos los ejecutables (carpeta bin)
-          cd bin
-      c) Ejecutar el script soinit.sh
-          ./soinit.sh
+  a) Como se está en el directorio $GRUPO/sisop, se debe volver al inicio
+      ``cd ..``
+  b) Luego ir hasta la carpeta donde se encuentran todos los ejecutables (carpeta bin por default)
+      ``cd bin``
+  c) Ejecutar el script soinit.sh
+      ``./soinit.sh``
       
   Lo que hace este script justamente es definir correctamente el ambiente, y si hay algun error o algun archivo que falte, lo
   avisará y además con un cierta ayuda para saber como solucionar el problema. Si no hay ningun problema que haga que el
@@ -62,12 +62,12 @@
   Cada línea que antes mencionamos aparece en un archivo de log. Para ello como se encuentra en la terminal se está en la carpeta 
   "bin" se debe hacer:
   
-      a) Volver a la carpeta inicial
-          cd ..
-      b) Ir a la carpeta de sisop
-          cd sisop
-      c) Ver el archivo de log de inicialización
-          more soinit.log
+  a) Volver a la carpeta inicial
+      ``cd ..``
+  b) Ir a la carpeta de sisop
+      ``cd sisop``
+  c) Ver el archivo de log de inicialización
+      ``more soinit.log``
       
    La forma de navegar es igual a la explicada para el archivo de log de instalación.
    
@@ -83,6 +83,6 @@
   Sucede lo mismo que pasaba para los otros archivos de log, este mostrará lo que va sucediendo en el flujo del programa. Por ende, 
   para ver esto, estando en la terminal en la carpeta "sisop" se debe hacer lo siguiente:
   
-          more tpcuotas.log
+      more tpcuotas.log
       
   Y misma forma de navegación que mencionamos antes.
