@@ -158,22 +158,11 @@ clasificar_novedades(){
 
 }
 
-verificar_contenido_linea(){
-    for idx in $cant_campos; do
-        campo=`cut -d "," -f $((idx+1)) <<< $line`
-        echo $campo
-        if [[ $campo = "^$" ]]; then
-            return 1
-        fi
-    done
-    return 0
-}
-
 procesar_novedaes(){
 
-	for i in $(ls $DIRENT/ok); do
+for i in $(ls $DIRENT/ok); do
         reg=0001
-		while read line; do
+while read line; do
             #echo $line
             reg_aux=`cut -d "," -f 1 <<< $line`
             codigo=`cut -d "," -f 2 <<< $line`
@@ -181,9 +170,10 @@ procesar_novedaes(){
             num_lot=${i:4:5}
             lookup=`grep "^$codigo,$terminal$" $DIRMAE/terminales.txt`
             cant_campos=`grep -o "," <<< $line | wc -l`
-            echo $cant_campos
-            
-            verificar_contenido_linea
+            empty_in=`grep -c ".*,,.*" <<< $line`
+            empty_start=`grep -c "^,.*$" <<< $line`
+            empty_end=`grep -c "^.*,$" <<< $line`
+            echo $l
 
             if [ $reg_aux -lt $reg ]; then
                 #numero de secuencia menor al esperado
@@ -213,7 +203,19 @@ procesar_novedaes(){
                 fi
                 #echo no data
                 echo -n "$i-Cantidad de datos incorrecta-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
-            elif [ $? -eq 1 ]; then
+            elif [[ $empty_in -eq 1 ]]; then
+                #datos faltantes
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-Datos faltantes-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+            elif [[ $empty_start -eq 1 ]]; then
+                #datos faltantes
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-Datos faltantes-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+            elif [[ $empty_end -eq 1 ]]; then
                 #datos faltantes
                 if [ ! -f $DIRRECH/C$num_lot ]; then
                     mkdir -p $DIRRECH/C$num_lot
@@ -237,22 +239,47 @@ procesar_novedaes(){
                     echo -e "WAR-$(date +"%Y/%m/%d %T")-Faltan los registros$faltantes en el archivo $i" >> "$DIRCONF/tpcuotas.log"
                     reg=$reg_aux
                 fi
+               
+                cuotas=`cut -d "," -f 7 <<< $line`
+                primeros8=`cut -d "," -f 1-8 <<< $line`
+                ultimos6=`cut -d "," -f 9-14 <<< $line`
+                montotransaccion=`cut -d "," -f 8 <<< $line`
+                fecha=`cut -d "," -f 4 <<< $line`
+                echo aaa                       
                 
-                cuotas=`cut -d "," -f 8 <<< $line`
-                echo aaa
-                #caso pago unico
                 if [ $cuotas = "001" ]; then
-                    echo -e "$i"
+                    echo -e "$i,$primeros8,000000000000,$montotransaccion,$cuotas,$montotransaccion,SinPlan,$fecha,$ultimos6" >> "$DIRSAL/$codigo.txt"
+                
+                else
+                    codigorubro=`cut -d "," -f 6 <<< $line`
+                    lineaf=`grep "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                    lineaf1=`grep -c "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                    montocuota=`echo "$montotransaccion/$cuotas" | bc`
+                    if [[ $lineaf1 -eq 0 ]]; then
+                        IFS=$'\n'                         
+                        for idx in $(seq 1 $cuotas); do
+                            echo -e "$i,$primeros8,000000000000,$montotransaccion,$idx,$montocuota,SinPlan,$fecha,$ultimos6" >> "$DIRSAL/$codigo.txt"        
+                        done
+                    else
+                        coef=`cut -d "," -f 4 <<< $lineaf`
+                        montotransacciontotal=`echo "$montotransaccion*$coef" | bc`
+                        costofinanciacion=`echo "$montotransacciontotal-$montotransaccion" | bc`
+                        plan=`cut -d "," -f 2 <<< $lineaf`
+                        IFS=$'\n'
+                        for idx in $(seq 1 $cuotas); do
+                            echo -e "$i,$primeros8,$costofinanciacion,$montotransacciontotal,$idx,$montocuota,$plan,$fecha,$ultimos6" >> "$DIRSAL/$codigo.txt"     
+                        done
+                    fi    	
                 fi
             fi
             reg=$((reg+1))
             #echo $reg_aux
         done < $DIRENT/ok/$i
 
-	done
-	
+done
 
-	debug procces_file "Se estan procesando novedades"
+
+debug procces_file "Se estan procesando novedades"
 }
 
 
