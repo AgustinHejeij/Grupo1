@@ -14,9 +14,11 @@
   b) Ir hasta la carpeta donde esta el script de instalación: 
   
   ``cd $GRUPO/sisop`` 
+  
   c) Ejecutar el script de instalación:
   
   ``./sotp1.sh`` 
+  
   Al ejecutar el script se tendrán que definir los directorios donde se quieran guardar ciertos archivos, por eso
   en cada caso se muestra un directorio por default y luego se podrá escribir el directorio que se requiera, tener
   en cuenta que las carpetas que vienen al descargarse el programa no se pueden seleccionar como tal. Para dejar el
@@ -28,6 +30,7 @@
   Si se quieren ver todos los directorios definidos se deberá hacer lo siguiente:
   
   ``cat  sotp1.conf``
+  
   Y mostrará en cada línea cada directorio definido asociado.
   
 ### 2.2 Log de instalación
@@ -36,6 +39,7 @@
   "sisop" se debe hacer:
   
    ``more sotp1.log``
+   
    Para ir leyendo este archivo se debe dar a "ENTER" para ir linea por linea o darle a "ESPACIO" si se quiere avanzar de a más
    líneas.
    
@@ -49,12 +53,15 @@
   a) Como se está en el directorio $GRUPO/sisop, se debe volver al inicio
   
   ``cd ..``
+  
   b) Luego ir hasta la carpeta donde se encuentran todos los ejecutables (carpeta bin por default)
   
   ``cd bin``
+  
   c) Ejecutar el script soinit.sh
   
   ``./soinit.sh``
+  
   Lo que hace este script justamente es definir correctamente el ambiente, y si hay algun error o algun archivo que falte, lo
   avisará y además con un cierta ayuda para saber como solucionar el problema. Si no hay ningun problema que haga que el
   programa principal no pueda ejecutarse, se lanza el programa y queda funcionando en segundo plano.
@@ -66,12 +73,15 @@
   a) Volver a la carpeta inicial
   
   ``cd ..``
+  
   b) Ir a la carpeta de sisop
   
   ``cd sisop``
+  
   c) Ver el archivo de log de inicialización
   
    ``more soinit.log``
+   
    La forma de navegar es igual a la explicada para el archivo de log de instalación.
    
 ### 4.2 Programa principal
@@ -87,4 +97,5 @@
   para ver esto, estando en la terminal en la carpeta "sisop" se debe hacer lo siguiente:
   
   ``more tpcuotas.log``
+  
   Y misma forma de navegación que mencionamos antes.
