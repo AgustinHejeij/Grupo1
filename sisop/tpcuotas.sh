@@ -6,10 +6,34 @@
 #DIRCONF=
 #DIRBIN=
 #DIRMAE=
-DIRENT='../ENTRADATP'
-DIRRECH='../rechazos'
-DIRPROC='../DIRPROC'
-DIRSAL='../DIRSAL'
+#DIRENT='../ENTRADATP'
+#DIRRECH='../rechazos'
+#DIRPROC='../DIRPROC'
+#DIRSAL='../DIRSAL'
+
+DIRBIN=`grep "^DIRBIN.*$" sotp1.conf`
+DIRBIN=${DIRBIN##*-}
+
+DIRMAE=`grep "^DIRMAE.*$" sotp1.conf`
+DIRMAE=${DIRMAE##*-}
+
+DIRENT=`grep "^DIRENT.*$" sotp1.conf`
+DIRENT=${DIRENT##*-}
+
+DIRRECH=`grep "^DIRRECH.*$" sotp1.conf`
+DIRRECH=${DIRRECH##*-}
+
+DIRPROC=`grep "^DIRPROC.*$" sotp1.conf`
+DIRPROC=${DIRPROC##*-}
+
+DIRSAL=`grep "^DIRSAL.*$" sotp1.conf`
+DIRSAL=${DIRSAL##*-}
+
+GRUPO=`grep "^GRUPO.*$" sotp1.conf`
+GRUPO=${GRUPO##*-}
+
+DIRCONF=`grep "^DIRCONF.*$" sotp1.conf`
+DIRCONF=${DIRCONF##*-}
 
 
 ####################### DEBUGUEAR ############################
@@ -119,6 +143,7 @@ clasificar_novedades(){
 			if [ $? -eq 1 ]
 			then
 				debug clasificar "Se mueve $i a $DIRENT/ok"
+                sort -o $DIRENT/$i $DIRENT/$i
 				mv $DIRENT/$i ${DIRENT:-.}/ok/$i 
 			else
 				debug clasificar "Se mueve $i a $DIRRECH"
@@ -133,10 +158,99 @@ clasificar_novedades(){
 
 }
 
+verificar_contenido_linea(){
+    for idx in $cant_campos; do
+        campo=`cut -d "," -f $((idx+1)) <<< $line`
+        echo $campo
+        if [[ $campo = "^$" ]]; then
+            return 1
+        fi
+    done
+    return 0
+}
+
 procesar_novedaes(){
 
+	for i in $(ls $DIRENT/ok); do
+        reg=0001
+		while read line; do
+            #echo $line
+            reg_aux=`cut -d "," -f 1 <<< $line`
+            codigo=`cut -d "," -f 2 <<< $line`
+            terminal=`cut -d "," -f 3 <<< $line`
+            num_lot=${i:4:5}
+            lookup=`grep "^$codigo,$terminal$" $DIRMAE/terminales.txt`
+            cant_campos=`grep -o "," <<< $line | wc -l`
+            echo $cant_campos
+            
+            verificar_contenido_linea
 
-	## Aca va lo groso del tp xd
+            if [ $reg_aux -lt $reg ]; then
+                #numero de secuencia menor al esperado
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-Numero de secuencia menor al esperado-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+
+            elif [[ ! ${codigo:1:5} -eq $num_lot ]]; then
+                #codigo de comercio no coincide con el nombre del archivo
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-El codigo de comercio del registro no coincide con el nombre del archivo-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+
+            elif [[ $lookup = "^$" ]]; then
+                #no existe la combinacion codigo de comercio - terminal
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-No se encontro la combinacion codigo de comercio,terminal en el archivo terminales.txt-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+
+            elif [[ ! $cant_campos -eq 13 ]]; then
+                #cantidad de datos incorrecta
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                #echo no data
+                echo -n "$i-Cantidad de datos incorrecta-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+            elif [ $? -eq 1 ]; then
+                #datos faltantes
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-Datos faltantes-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+            else
+                #se puede procesar la linea
+
+                #creo el archivo del comercio si no existe
+                if [ ! -f "$DIRSAL/$codigo.txt" ]; then
+                    echo -n >> "$DIRSAL/$codigo.txt"
+                fi
+
+                if [ $reg_aux -gt $reg ]; then
+                    #logueo los registros faltantes
+                    IFS=$'\n'
+                    for j in $(seq -f "%04g" $reg $((reg_aux+1))); do
+                        faltantes="$faltantes $j"
+                    done
+                    IFS=$' '
+                    echo -e "WAR-$(date +"%Y/%m/%d %T")-Faltan los registros$faltantes en el archivo $i" >> "$DIRCONF/tpcuotas.log"
+                    reg=$reg_aux
+                fi
+                
+                cuotas=`cut -d "," -f 8 <<< $line`
+                echo aaa
+                #caso pago unico
+                if [ $cuotas = "001" ]; then
+                    echo -e "$i"
+                fi
+            fi
+            reg=$((reg+1))
+            #echo $reg_aux
+        done < $DIRENT/ok/$i
+
+	done
+	
 
 	debug procces_file "Se estan procesando novedades"
 }
@@ -172,13 +286,13 @@ while [[ 1 ]]; do
 	sleep 2
 
 	## Corte de prueba
-	if [ $a -gt 0 ]
-	then 
-		a=`expr $a - 1`
-		echo $a'/2'
-	else
-		exit
-	fi
+	#if [ $a -gt 0 ]
+	#then 
+	#	a=`expr $a - 1`
+	#	echo $a'/2'
+	#else
+	#	exit
+	#fi
 
 done
 
