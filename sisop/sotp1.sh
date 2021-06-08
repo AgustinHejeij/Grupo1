@@ -60,6 +60,11 @@ necesita_reparacion(){
         return 1
     fi
 
+    if [ ! -d "$DIRENT/ok" ]
+    then
+        return 1
+    fi
+
     if [ ! -d $DIRRECH ]
     then
         return 1
@@ -253,6 +258,8 @@ then
             echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de tablas maestras" >> "$GRUPO/sisop/sotp1.log"
             mkdir -p "$GRUPO/$DIRENT"
             echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de novedades" >> "$GRUPO/sisop/sotp1.log"
+            mkdir -p "$GRUPO/$DIRENT/ok"
+            echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de novedades ok" >> "$GRUPO/sisop/sotp1.log"
             mkdir -p "$GRUPO/$DIRRECH"
             echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de rechazados" >> "$GRUPO/sisop/sotp1.log"
             mkdir -p "$GRUPO/$DIRPROC"
@@ -364,6 +371,12 @@ else
                 then
                     echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de novedades" >> "$GRUPO/sisop/sotp1.log"
                     mkdir -p "$DIRENT"
+                fi
+
+                if [ ! -d "$DIRENT/ok" ]
+                then
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de novedades ok" >> "$GRUPO/sisop/sotp1.log"
+                    mkdir -p "$DIRENT/ok"
                 fi
 
                 if [ ! -d $DIRRECH ]
