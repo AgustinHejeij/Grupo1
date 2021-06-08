@@ -11,28 +11,28 @@
 #DIRPROC='../DIRPROC'
 #DIRSAL='../DIRSAL'
 
-DIRBIN=`grep "^DIRBIN.*$" sotp1.conf`
+DIRBIN=`grep "^DIRBIN.*$" $(dirname $PWD)/sisop/sotp1.conf`
 DIRBIN=${DIRBIN##*-}
 
-DIRMAE=`grep "^DIRMAE.*$" sotp1.conf`
+DIRMAE=`grep "^DIRMAE.*$" $(dirname $PWD)/sisop/sotp1.conf`
 DIRMAE=${DIRMAE##*-}
 
-DIRENT=`grep "^DIRENT.*$" sotp1.conf`
+DIRENT=`grep "^DIRENT.*$" $(dirname $PWD)/sisop/sotp1.conf`
 DIRENT=${DIRENT##*-}
 
-DIRRECH=`grep "^DIRRECH.*$" sotp1.conf`
+DIRRECH=`grep "^DIRRECH.*$" $(dirname $PWD)/sisop/sotp1.conf`
 DIRRECH=${DIRRECH##*-}
 
-DIRPROC=`grep "^DIRPROC.*$" sotp1.conf`
+DIRPROC=`grep "^DIRPROC.*$" $(dirname $PWD)/sisop/sotp1.conf`
 DIRPROC=${DIRPROC##*-}
 
-DIRSAL=`grep "^DIRSAL.*$" sotp1.conf`
+DIRSAL=`grep "^DIRSAL.*$" $(dirname $PWD)/sisop/sotp1.conf`
 DIRSAL=${DIRSAL##*-}
 
-GRUPO=`grep "^GRUPO.*$" sotp1.conf`
+GRUPO=`grep "^GRUPO.*$" $(dirname $PWD)/sisop/sotp1.conf`
 GRUPO=${GRUPO##*-}
 
-DIRCONF=`grep "^DIRCONF.*$" sotp1.conf`
+DIRCONF=`grep "^DIRCONF.*$" $(dirname $PWD)/sisop/sotp1.conf`
 DIRCONF=${DIRCONF##*-}
 
 
@@ -168,14 +168,47 @@ while read line; do
             codigo=`cut -d "," -f 2 <<< $line`
             terminal=`cut -d "," -f 3 <<< $line`
             num_lot=${i:4:5}
-            lookup=`grep "^$codigo,$terminal$" $DIRMAE/terminales.txt`
+            lookup=`grep -c "$codigo,$terminal" "$DIRMAE/terminales.txt"`
             cant_campos=`grep -o "," <<< $line | wc -l`
             empty_in=`grep -c ".*,,.*" <<< $line`
             empty_start=`grep -c "^,.*$" <<< $line`
             empty_end=`grep -c "^.*,$" <<< $line`
-            echo $l
+            if [ $cant_campos -eq 0 ]; then
+                #cantidad de datos incorrecta
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-No hay separadores-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+                continue
+            elif [[ ! $cant_campos -eq 13 ]]; then
+                #cantidad de datos incorrecta
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-Cantidad de datos incorrecta-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
 
-            if [ $reg_aux -lt $reg ]; then
+            elif [[ $empty_in -eq 1 ]]; then
+                #datos faltantes
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-Datos faltantes-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+
+            elif [[ $empty_start -eq 1 ]]; then
+                #datos faltantes
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-Datos faltantes-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
+
+            elif [[ $empty_end -eq 1 ]]; then
+                #datos faltantes
+                if [ ! -f $DIRRECH/C$num_lot ]; then
+                    mkdir -p $DIRRECH/C$num_lot
+                fi
+                echo -n "$i-Datos faltantes-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"            
+
+            elif [ $reg_aux -lt $reg ]; then
                 #numero de secuencia menor al esperado
                 if [ ! -f $DIRRECH/C$num_lot ]; then
                     mkdir -p $DIRRECH/C$num_lot
@@ -189,38 +222,14 @@ while read line; do
                 fi
                 echo -n "$i-El codigo de comercio del registro no coincide con el nombre del archivo-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
 
-            elif [[ $lookup = "^$" ]]; then
+            elif [[ $lookup -eq 0 ]]; then
                 #no existe la combinacion codigo de comercio - terminal
+                echo "$codigo-$terminal"
                 if [ ! -f $DIRRECH/C$num_lot ]; then
                     mkdir -p $DIRRECH/C$num_lot
                 fi
                 echo -n "$i-No se encontro la combinacion codigo de comercio,terminal en el archivo terminales.txt-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
 
-            elif [[ ! $cant_campos -eq 13 ]]; then
-                #cantidad de datos incorrecta
-                if [ ! -f $DIRRECH/C$num_lot ]; then
-                    mkdir -p $DIRRECH/C$num_lot
-                fi
-                #echo no data
-                echo -n "$i-Cantidad de datos incorrecta-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
-            elif [[ $empty_in -eq 1 ]]; then
-                #datos faltantes
-                if [ ! -f $DIRRECH/C$num_lot ]; then
-                    mkdir -p $DIRRECH/C$num_lot
-                fi
-                echo -n "$i-Datos faltantes-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
-            elif [[ $empty_start -eq 1 ]]; then
-                #datos faltantes
-                if [ ! -f $DIRRECH/C$num_lot ]; then
-                    mkdir -p $DIRRECH/C$num_lot
-                fi
-                echo -n "$i-Datos faltantes-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
-            elif [[ $empty_end -eq 1 ]]; then
-                #datos faltantes
-                if [ ! -f $DIRRECH/C$num_lot ]; then
-                    mkdir -p $DIRRECH/C$num_lot
-                fi
-                echo -n "$i-Datos faltantes-$line" >> "$DIRRECH/C$num_lot/transacciones.rech"
             else
                 #se puede procesar la linea
 
@@ -235,7 +244,7 @@ while read line; do
                     for j in $(seq -f "%04g" $reg $((reg_aux+1))); do
                         faltantes="$faltantes $j"
                     done
-                    IFS=$' '
+                    IFS=' '
                     echo -e "WAR-$(date +"%Y/%m/%d %T")-Faltan los registros$faltantes en el archivo $i" >> "$DIRCONF/tpcuotas.log"
                     reg=$reg_aux
                 fi
@@ -243,9 +252,11 @@ while read line; do
                 cuotas=`cut -d "," -f 7 <<< $line`
                 primeros8=`cut -d "," -f 1-8 <<< $line`
                 ultimos6=`cut -d "," -f 9-14 <<< $line`
-                montotransaccion=`cut -d "," -f 8 <<< $line`
-                fecha=`cut -d "," -f 4 <<< $line`
-                echo aaa                       
+                montotransaccion_aux=`cut -d "," -f 8 <<< $line`
+                montotransaccion="${montotransaccion_aux:0:10}.${montotransaccion_aux:10:2}"
+                #echo $montotransaccion
+                montocuota=`echo "$montotransaccion/$cuotas" | bc -l`
+                fecha=`cut -d "," -f 4 <<< $line`                      
                 
                 if [ $cuotas = "001" ]; then
                     echo -e "$i,$primeros8,000000000000,$montotransaccion,$cuotas,$montotransaccion,SinPlan,$fecha,$ultimos6" >> "$DIRSAL/$codigo.txt"
@@ -253,22 +264,41 @@ while read line; do
                 else
                     codigorubro=`cut -d "," -f 6 <<< $line`
                     lineaf=`grep "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
-                    lineaf1=`grep -c "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
-                    montocuota=`echo "$montotransaccion/$cuotas" | bc`
-                    if [[ $lineaf1 -eq 0 ]]; then
+                    chequeo=`grep -c "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                    
+                    if [[ $chequeo -eq 0 ]]; then
+                        montocuota=`echo "scale=2;$montotransaccion/$cuotas" | bc -l`
+                        montocuota=`echo "scale=2;$montocuota * 100" | bc -l`
+                        montocuota=`cut -d "." -f 1 <<< $montocuota`
+                        printf -v montocuota "%012d" $montocuota
                         IFS=$'\n'                         
-                        for idx in $(seq 1 $cuotas); do
-                            echo -e "$i,$primeros8,000000000000,$montotransaccion,$idx,$montocuota,SinPlan,$fecha,$ultimos6" >> "$DIRSAL/$codigo.txt"        
+                        for idx in $(seq -f "%03g" 1 $cuotas); do
+                            echo -e "$i,$primeros8,000000000000,$montotransaccion,$idx,$montocuota,SinPlan,$(date -d "$fecha+$((idx-1)) month" +%Y%m%d),$ultimos6" >> "$DIRSAL/$codigo.txt"        
                         done
+                        IFS=' '
                     else
                         coef=`cut -d "," -f 4 <<< $lineaf`
-                        montotransacciontotal=`echo "$montotransaccion*$coef" | bc`
-                        costofinanciacion=`echo "$montotransacciontotal-$montotransaccion" | bc`
+                        coef="${coef:0:4}.${coef:4:4}"
+                        echo "coef: $coef"
+                        echo "monto transaccion: $montotransaccion"
+                        montotransacciontotal=`echo "scale=2;$montotransaccion*$coef" | bc -l`
+                        echo "monto total OK: $montotransacciontotal"
+                        costofinanciacion=`echo "scale=2;$montotransacciontotal-$montotransaccion" | bc -l`
+                        echo "costo financiacion: $costofinanciacion"
+                        montocuota=`echo "scale=2;$montotransacciontotal/$cuotas" | bc -l`
+                        echo "monto cuota 1: $montocuota"
+                        montocuota=`echo "scale=2;$montocuota * 100" | bc -l`
+                        echo "monto cuota 2: $montocuota"
+                        montocuota=`cut -d "." -f 1 <<< $montocuota`
+                        echo "monto cuota 3: $montocuota"
+                        printf -v montocuota "%012d" $montocuota
+                        echo "monto cuota 4: $montocuota"
                         plan=`cut -d "," -f 2 <<< $lineaf`
                         IFS=$'\n'
-                        for idx in $(seq 1 $cuotas); do
-                            echo -e "$i,$primeros8,$costofinanciacion,$montotransacciontotal,$idx,$montocuota,$plan,$fecha,$ultimos6" >> "$DIRSAL/$codigo.txt"     
+                        for idx in $(seq -f "%03g" 1 $cuotas); do
+                            echo -e "$i,$primeros8,$costofinanciacion,$montotransacciontotal,$idx,$montocuota,$plan,$(date -d "$fecha+$((idx-1)) month" +%Y%m%d),$ultimos6" >> "$DIRSAL/$codigo.txt"     
                         done
+                        IFS=' '
                     fi    	
                 fi
             fi
