@@ -165,7 +165,7 @@ for i in $(ls $DIRENT/ok); do
         reg=0001
         debug procesando_registro "Comenzando a procesar $i"
 
-while read line; do
+        while read line; do
 
 
             #echo $line
@@ -278,13 +278,14 @@ while read line; do
 
                     # Chequeo si coincide RUBRO-CUOTAS
                     lineaf=`grep "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
-                    chequeo=`grep -c ".*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                    chequeo=`grep -c "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                    echo $chequeo
                     
                     if [[ ! $chequeo -eq 0 ]]; then
 
                         # Caso 1: coincide rubro y cuotas
                         debug procesando_registro "Registro $reg del archivo $i: caso 1"
-
+                        
                         coef=`cut -d "," -f 4 <<< $lineaf`
                         coef="${coef:0:4}.${coef:4:4}"
                         plan=`cut -d "," -f 2 <<< $lineaf`
@@ -316,29 +317,31 @@ while read line; do
 
                 # Calculos 
 
-                debug procesando_registro "coef: $coef"
-                debug procesando_registro  "monto transaccion: $montotransaccion"
                 montotransacciontotal=`echo "scale=2;$montotransaccion*$coef" | bc -l`
-                debug procesando_registro  "monto total OK: $montotransacciontotal"
                 costofinanciacion=`echo "scale=2;$montotransacciontotal-$montotransaccion" | bc -l`
-                debug procesando_registro  "costo financiacion: $costofinanciacion"
+
                 montocuota=`echo "scale=2;$montotransacciontotal/$cuotas" | bc -l`
-                debug procesando_registro  "monto cuota 1: $montocuota"
                 montocuota=`echo "scale=2;$montocuota * 100" | bc -l`
-                debug procesando_registro  "monto cuota 2: $montocuota"
                 montocuota=`cut -d "." -f 1 <<< $montocuota`
-                debug procesando_registro  "monto cuota 3: $montocuota"
                 printf -v montocuota "%012d" $montocuota
-                debug procesando_registro  "monto cuota 4: $montocuota"
+
+                montotransacciontotal=`echo "scale=2;$montotransacciontotal * 100" | bc -l`
+                montotransacciontotal=`cut -d "." -f 1 <<< $montotransacciontotal`
+                printf -v montotransacciontotal "%012d" $montotransacciontotal
+
+                costofinanciacion=`echo "scale=2;$costofinanciacion * 100" | bc -l`
+                costofinanciacion=`cut -d "." -f 1 <<< $costofinanciacion`
+                printf -v costofinanciacion "%012d" $costofinanciacion
 
                 # Grabado en registro
                 IFS=$'\n'
                 for idx in $(seq -f "%03g" 1 $cuotas); do
-                    echo -e "$i,$primeros8,$costofinanciacion,$montotransacciontotal,$idx,$montocuota,$plan,$(date -d "$fecha+$((idx-1)) month" +%Y%m%d),$ultimos6" >> "$DIRSAL/$codigo.txt"     
+                    num_cuota=`echo "$idx - 1" | bc -l`
+                    echo -e "$i,$primeros8,$costofinanciacion,$montotransacciontotal,$idx,$montocuota,$plan,$(date -d "$fecha+$num_cuota month" +%Y%m%d),$ultimos6" >> "$DIRSAL/$codigo.txt"     
                 done
                 IFS=' ' 
             fi
-            reg=$((reg+1))
+            reg=`echo "$reg + 1" | bc -l`
             #echo $reg_aux
         done < $DIRENT/ok/$i
 
