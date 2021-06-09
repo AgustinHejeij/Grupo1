@@ -43,7 +43,7 @@ DIRCONF=${DIRCONF##*-}
 # DEBUG_CONTEXT=all			para debuguear todos los contextos
 
 DEBUG="Y"			
-DEBUG_CONTEXT="all"	
+DEBUG_CONTEXT="procesando_registro"	
 
 # Sintaxis:		debug context "[mensaje]"   (con comillas)
 # Ejemplo :		debug main "Se inicia el main con el ejecutable $0"
@@ -160,9 +160,14 @@ clasificar_novedades(){
 
 procesar_novedaes(){
 
+IFS=$'\n'
 for i in $(ls $DIRENT/ok); do
         reg=0001
+        debug procesando_registro "Comenzando a procesar $i"
+
 while read line; do
+
+
             #echo $line
             reg_aux=`cut -d "," -f 1 <<< $line`
             codigo=`cut -d "," -f 2 <<< $line`
@@ -249,67 +254,99 @@ while read line; do
                     reg=$reg_aux
                 fi
                
+                # Se leen los atributos del registro
                 cuotas=`cut -d "," -f 7 <<< $line`
                 primeros8=`cut -d "," -f 1-8 <<< $line`
                 ultimos6=`cut -d "," -f 9-14 <<< $line`
                 montotransaccion_aux=`cut -d "," -f 8 <<< $line`
                 montotransaccion="${montotransaccion_aux:0:10}.${montotransaccion_aux:10:2}"
-                #echo $montotransaccion
-                montocuota=`echo "$montotransaccion/$cuotas" | bc -l`
-                fecha=`cut -d "," -f 4 <<< $line`                      
-                
+                fecha=`cut -d "," -f 4 <<< $line`        
+                codigorubro=`cut -d "," -f 6 <<< $line`              
+
+
+                # Obtención del coeficiente y del plan
                 if [ $cuotas = "001" ]; then
-                    echo -e "$i,$primeros8,000000000000,$montotransaccion,$cuotas,$montotransaccion,SinPlan,$fecha,$ultimos6" >> "$DIRSAL/$codigo.txt"
-                
-                else
-                    codigorubro=`cut -d "," -f 6 <<< $line`
-                    lineaf=`grep "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
-                    chequeo=`grep -c "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+
+                    # Caso 0: una sola cuota (sin interes)
+                    debug procesando_registro "Registro $reg: caso 0"
+
+                    coef=1
+                    coef="${coef:0:4}.${coef:4:4}"
+                    plan='SinPlan'
                     
-                    if [[ $chequeo -eq 0 ]]; then
-                        montocuota=`echo "scale=2;$montotransaccion/$cuotas" | bc -l`
-                        montocuota=`echo "scale=2;$montocuota * 100" | bc -l`
-                        montocuota=`cut -d "." -f 1 <<< $montocuota`
-                        printf -v montocuota "%012d" $montocuota
-                        IFS=$'\n'                         
-                        for idx in $(seq -f "%03g" 1 $cuotas); do
-                            echo -e "$i,$primeros8,000000000000,$montotransaccion,$idx,$montocuota,SinPlan,$(date -d "$fecha+$((idx-1)) month" +%Y%m%d),$ultimos6" >> "$DIRSAL/$codigo.txt"        
-                        done
-                        IFS=' '
-                    else
+                else
+
+                    # Chequeo si coincide RUBRO-CUOTAS
+                    lineaf=`grep "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                    chequeo=`grep -c ".*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                    
+                    if [[ ! $chequeo -eq 0 ]]; then
+
+                        # Caso 1: coincide rubro y cuotas
+                        debug procesando_registro "Registro $reg del archivo $i: caso 1"
+
                         coef=`cut -d "," -f 4 <<< $lineaf`
                         coef="${coef:0:4}.${coef:4:4}"
-                        echo "coef: $coef"
-                        echo "monto transaccion: $montotransaccion"
-                        montotransacciontotal=`echo "scale=2;$montotransaccion*$coef" | bc -l`
-                        echo "monto total OK: $montotransacciontotal"
-                        costofinanciacion=`echo "scale=2;$montotransacciontotal-$montotransaccion" | bc -l`
-                        echo "costo financiacion: $costofinanciacion"
-                        montocuota=`echo "scale=2;$montotransacciontotal/$cuotas" | bc -l`
-                        echo "monto cuota 1: $montocuota"
-                        montocuota=`echo "scale=2;$montocuota * 100" | bc -l`
-                        echo "monto cuota 2: $montocuota"
-                        montocuota=`cut -d "." -f 1 <<< $montocuota`
-                        echo "monto cuota 3: $montocuota"
-                        printf -v montocuota "%012d" $montocuota
-                        echo "monto cuota 4: $montocuota"
                         plan=`cut -d "," -f 2 <<< $lineaf`
-                        IFS=$'\n'
-                        for idx in $(seq -f "%03g" 1 $cuotas); do
-                            echo -e "$i,$primeros8,$costofinanciacion,$montotransacciontotal,$idx,$montocuota,$plan,$(date -d "$fecha+$((idx-1)) month" +%Y%m%d),$ultimos6" >> "$DIRSAL/$codigo.txt"     
-                        done
-                        IFS=' '
-                    fi    	
+
+                    else
+
+                        # Chequeo si coincide CUOTAS, con rubro vacío
+                        lineaf=`grep "^,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                        chequeo=`grep -c ".*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                        
+                        if [[ ! $chequeo -eq 0 ]]; then
+
+                            # Caso 2: no coincide rubro y pero sí cuotas
+                            debug procesando_registro "Registro $reg del archivo $i: caso 2"
+
+                            coef=`cut -d "," -f 4 <<< $lineaf`
+                            coef="${coef:0:4}.${coef:4:4}"
+                            plan='Entidad'
+                        else
+
+                            # Caso 3: no coincide rubro y ni cuotas (sin interes)
+                            debug procesando_registro "Registro $reg del archivo $i: caso 3"
+                            coef=1
+                            coef="${coef:0:4}.${coef:4:4}"
+                            plan='SinPlan'
+                        fi
+                    fi   	
                 fi
+
+                # Calculos 
+
+                debug procesando_registro "coef: $coef"
+                debug procesando_registro  "monto transaccion: $montotransaccion"
+                montotransacciontotal=`echo "scale=2;$montotransaccion*$coef" | bc -l`
+                debug procesando_registro  "monto total OK: $montotransacciontotal"
+                costofinanciacion=`echo "scale=2;$montotransacciontotal-$montotransaccion" | bc -l`
+                debug procesando_registro  "costo financiacion: $costofinanciacion"
+                montocuota=`echo "scale=2;$montotransacciontotal/$cuotas" | bc -l`
+                debug procesando_registro  "monto cuota 1: $montocuota"
+                montocuota=`echo "scale=2;$montocuota * 100" | bc -l`
+                debug procesando_registro  "monto cuota 2: $montocuota"
+                montocuota=`cut -d "." -f 1 <<< $montocuota`
+                debug procesando_registro  "monto cuota 3: $montocuota"
+                printf -v montocuota "%012d" $montocuota
+                debug procesando_registro  "monto cuota 4: $montocuota"
+
+                # Grabado en registro
+                IFS=$'\n'
+                for idx in $(seq -f "%03g" 1 $cuotas); do
+                    echo -e "$i,$primeros8,$costofinanciacion,$montotransacciontotal,$idx,$montocuota,$plan,$(date -d "$fecha+$((idx-1)) month" +%Y%m%d),$ultimos6" >> "$DIRSAL/$codigo.txt"     
+                done
+                IFS=' ' 
             fi
             reg=$((reg+1))
             #echo $reg_aux
         done < $DIRENT/ok/$i
 
+    debug procesar_novedaes "Se termina de procesar el registro $i. Se mueve a $DIRPROC"
+    mv "$DIRENT/ok/$i" "$DIRPROC/$i"
+
 done
 
-
-debug procces_file "Se estan procesando novedades"
 }
 
 
