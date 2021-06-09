@@ -261,7 +261,7 @@ for i in $(ls $DIRENT/ok); do
                 montotransaccion_aux=`cut -d "," -f 8 <<< $line`
                 montotransaccion="${montotransaccion_aux:0:10}.${montotransaccion_aux:10:2}"
                 fecha=`cut -d "," -f 4 <<< $line`        
-                codigorubro=`cut -d "," -f 6 <<< $line`              
+                codigorubro=`cut -d "," -f 6 <<< $line`            
 
 
                 # Obtención del coeficiente y del plan
@@ -279,31 +279,54 @@ for i in $(ls $DIRENT/ok); do
                     # Chequeo si coincide RUBRO-CUOTAS
                     lineaf=`grep "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
                     chequeo=`grep -c "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                    tope=`cut -d "," -f 5 <<< $lineaf`  
                     echo $chequeo
                     
                     if [[ ! $chequeo -eq 0 ]]; then
 
                         # Caso 1: coincide rubro y cuotas
-                        debug procesando_registro "Registro $reg del archivo $i: caso 1"
+                        debug procesando_registro "Registro $reg del archivo $i: caso 1"                                             
                         
-                        coef=`cut -d "," -f 4 <<< $lineaf`
-                        coef="${coef:0:4}.${coef:4:4}"
-                        plan=`cut -d "," -f 2 <<< $lineaf`
+                        if [[ ! $montotransaccion -gt $tope ]]; then
+                            coef=`cut -d "," -f 4 <<< $lineaf`
+                            coef="${coef:0:4}.${coef:4:4}"
+                            plan=`cut -d "," -f 2 <<< $lineaf`
+                        else
+                            # Chequeo si coincide CUOTAS, con rubro vacío
+                            lineaf=`grep "^,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                            chequeo=`grep -c ".*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
+                            nuevo_tope=`cut -d "," -f 5 <<< $lineaf`
+                            
+                            if [[ ! $chequeo -eq 0 ]]; then
+                            
+                                if [[ ! $montotransaccion -gt $nuevo_tope ]]; then
+
+                                    # Caso 2: no coincide rubro, pero sí cuotas, monto menor tope
+                                    debug procesando_registro "Registro $reg del archivo $i: caso 2"
+                                    coef=`cut -d "," -f 4 <<< $lineaf`
+                                    coef="${coef:0:4}.${coef:4:4}"
+                                    plan='Entidad'
+                                fi
+                            fi
+                        fi
 
                     else
 
                         # Chequeo si coincide CUOTAS, con rubro vacío
                         lineaf=`grep "^,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
                         chequeo=`grep -c ".*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
-                        
+                        nuevo_tope=`cut -d "," -f 5 <<< $lineaf`
+                            
                         if [[ ! $chequeo -eq 0 ]]; then
+                            
+                            if [[ ! $montotransaccion -gt $nuevo_tope ]]; then
 
-                            # Caso 2: no coincide rubro y pero sí cuotas
-                            debug procesando_registro "Registro $reg del archivo $i: caso 2"
-
-                            coef=`cut -d "," -f 4 <<< $lineaf`
-                            coef="${coef:0:4}.${coef:4:4}"
-                            plan='Entidad'
+                                # Caso 2: no coincide rubro, pero sí cuotas, monto menor tope
+                                debug procesando_registro "Registro $reg del archivo $i: caso 2"
+                                coef=`cut -d "," -f 4 <<< $lineaf`
+                                coef="${coef:0:4}.${coef:4:4}"
+                                plan='Entidad'
+                            fi
                         else
 
                             # Caso 3: no coincide rubro y ni cuotas (sin interes)
