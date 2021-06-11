@@ -141,17 +141,18 @@ ejecutar_proceso_ppal(){
     if [ $TP_IN_EJEC -eq 1 ]; then
         echo "INF-$(date +"%Y/%m/%d %T")-Listo para ejecutar el proceso principal" >> "$BASE/soinit.log"
         echo "INF-$(date +"%Y/%m/%d %T")-Se tiene de 'arrancotp1' para reanudar el proceso ante un freno de 'frenotp1'" >> "$BASE/soinit.log"
-        echo "Listo para ejecutar"
         echo "Se dispone de 'arrancotp1' para reanudar el proceso ante un freno de 'frenotp1'"
         
         ## CHEQUEAR ESTO FIJA!!!!
         ./tpcuotas.sh &
     else
         echo "ERR-$(date +"%Y/%m/%d %T")-El proceso principal ya se encuentra en ejecución" >> "$BASE/soinit.log"
+        echo "INF-$(date +"%Y/%m/%d %T")-Si lo que se quiere es inicializar el ambiente ejecute el comando 'frenotp1'y vuelva a ejecutar este script" >> "$BASE/soinit.log"
     fi
 }
 
 BASE="../sisop"
+echo "INF-$(date +"%Y/%m/%d %T")-El usuario $USER inicializó el ambiente+" >> "$BASE/soinit.log"
 
 ## chequeo instalación
 check_instalacion
