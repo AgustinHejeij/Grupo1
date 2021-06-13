@@ -4,6 +4,23 @@
   - Del repositorio descargar los archivos en formato .zip
   - Moverlos a la carpeta donde se quiera guardar
   - Descomprimir el .zip que se descargó en esa misma carpeta
+
+### 1.1 Qué deja la descarga?
+  Te deja la carpeta Grupo1 donde adentro tiene las siguientes carpetas:
+    -**sisop** 
+      Aquí dentro estará el script de instalación
+    -**original** 
+      Aquí dentro están tenemos dos subcarpetas, una donde se encuentran todos los scripts y otra donde se encuentran
+      todas las tablas maestras. Esta carpeta no puede ser tocar ya que en caso de errores, con esta se solucionarán.
+    -**tp1datos** 
+      Aquí dentro estará el script de instalación
+    -**misdatos** 
+      Aquí dentro están todos los casos de prueba creados por nosotros, y se encuentran divididas en subcarpetas
+      para cada caso que agregamos. 
+    -**mispruebas** 
+      Aquí dentro están los resultados de las ejecuciones de las pruebas, donde están divididos en subcarpetas 
+      para cada caso contemplados.
+  Estos nombres de carpetas están reservados y no pueden ser utilizados, como así tambien Grupo1.
   
 ## 2. Instalación
   Una vez que se tienen los archivos correspondientes y se encuentra en la carpeta donde estan dichos archivos, 
@@ -26,14 +43,37 @@
   Luego de definir todos los directorios podes confirmar o no la instalación, si se le da a la opción de no confirmar
   se vuelven a pedir todos los directorios para luego volver a confirmar o no la instalación.
   
-### 2.1 Directorios definidos
+### 2.1 Qué deja la instalación?
+  Una vez que se ejecuta el script de instalación se crea lo siguiente:
+    -**Carpeta /bin**
+      - Todos los scripts estarán en esta carpeta excepto el script de instalación que esta en la carpeta sisop.
+      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRBIN)
+    -**Carpeta master**
+      - Acá se encuentran las tablas maestras.
+      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRMAE)
+    -**Carpeta ENTRADATP**
+      - Aquí dentro se deberán agregar los lotes que se quieran procesar.
+      - Contiene una subcarpeta dentro llamada **ok** donde estarán todas las novedades aceptadas, luego de procesarlas.
+      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRENT)
+    -**Carpeta rechazos**
+      - Se van creando las carpetas para cada comercio donde dentro estará el archivo transacciones.rech, si es que el lote
+      procesado tiene transacciones rechazadas.
+      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRRECH)      
+    -**Carpeta lotes**
+      - Cada vez que se procese un lote, este irá a este directorio tal cual como estaba originalmente.
+      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRPROC) 
+    -**Carpeta SALIDATP**
+      - Para cada comercio, se crea un archivo con todas las transacciones ya procesadas.
+      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRSAL)        
+
+### 2.2 Directorios definidos
   Si se quieren ver todos los directorios definidos se deberá hacer lo siguiente:
   
     cat  sotp1.conf
   
   Y mostrará en cada línea cada directorio definido asociado.
   
-### 2.2 Log de instalación
+### 2.3 Log de instalación
   También se cuenta con un archivo de log, donde cada línea refleja lo que va sucediendo en el flujo de la instalación,
   se puede encontrar desde información, warnings y errores. Para ello como se encuentra en la terminal se está en la carpeta 
   "sisop" se debe hacer:
@@ -132,7 +172,6 @@ g) Una vez finalizado todo el procesamiento de las pruebas, se puede frenar el p
 
 h) Cuando se quiera abandonar la sesión y borrar el ambiente del programa, se puede cerrar la terminal.
 
-
 ### 4.3 Detención manual
 Como se explicó en la sección de inicialización, el programa principal comienza a correr en segundo plano automáticamente, por lo que estará buscando y procesando novedades indefinidamente. Si se quiere pausar la ejecución, entonces se debe realizar lo siguiente:
 
@@ -159,3 +198,4 @@ b) Ejecutar el script llamado "arrancotp.sh"
 
 Se verificará la correcta inicialización y se retomará la lectura/procesamiento de novedades indefinidamente.
 
+## 5. Ejecución de las pruebas
