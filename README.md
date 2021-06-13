@@ -60,7 +60,7 @@
   
   c) Ejecutar el script soinit.sh
   
-    ./soinit.sh
+    . ./soinit.sh
   
   Lo que hace este script justamente es definir correctamente el ambiente, y si hay algun error o algun archivo que falte, lo
   avisará y además con un cierta ayuda para saber como solucionar el problema. Si no hay ningun problema que haga que el
