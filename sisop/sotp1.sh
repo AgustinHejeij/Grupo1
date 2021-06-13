@@ -18,12 +18,26 @@ es_irreparable(){
             then
                 return 1
         fi
-    #elif [ ! -f "$DIRBIN/soinit.sh" ]
-    #then
-    #    if [ ! -f "$GRUPO/original/scripts/soinit.sh" ]
-    #        then
-    #            return 1
-    #    fi
+    elif [ ! -f "$DIRBIN/soinit.sh" ]
+    then
+        if [ ! -f "$GRUPO/original/scripts/soinit.sh" ]
+            then
+                return 1
+        fi
+    
+    elif [ ! -f "$DIRBIN/frenotp1.sh" ]
+    then
+        if [ ! -f "$GRUPO/original/scripts/frenotp1.sh" ]
+            then
+                return 1
+        fi
+
+    elif [ ! -f "$DIRBIN/arrancotp1.sh" ]
+    then
+        if [ ! -f "$GRUPO/original/scripts/arrancotp1.sh" ]
+            then
+                return 1
+        fi
     fi
     return 0
 }
@@ -40,10 +54,20 @@ necesita_reparacion(){
             return 1
     fi
 
-    #if [ ! -f "$DIRBIN/soinit.sh" ]
-    #   then
-    #        return 1
-    #fi
+    if [ ! -f "$DIRBIN/soinit.sh" ]
+       then
+            return 1
+    fi
+
+    if [ ! -f "$DIRBIN/arrancotp1.sh" ]
+       then
+            return 1
+    fi
+
+    if [ ! -f "$DIRBIN/frenotp1.sh" ]
+       then
+            return 1
+    fi
 
     if [ ! -f "$DIRMAE/financiacion.txt" ]
        then
@@ -274,8 +298,14 @@ then
             echo -e "INF-$(date +"%Y/%m/%d %T")-Se copio el archivo financiacion.txt al directorio de tablas maestras" >> "$GRUPO/sisop/sotp1.log"
             cp $GRUPO/original/tablas_maestras/terminales.txt $GRUPO/$DIRMAE
             echo -e "INF-$(date +"%Y/%m/%d %T")-Se copio el archivo terminales.txt al directorio de tablas maestras" >> "$GRUPO/sisop/sotp1.log"
-            mv "$GRUPO/original/scripts/tpcuotas.sh" "$GRUPO/$DIRBIN"
+            cp "$GRUPO/original/scripts/tpcuotas.sh" "$GRUPO/$DIRBIN"
             echo -e "INF-$(date +"%Y/%m/%d %T")-Se copio el archivo tpcuotas.sh al directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
+            cp "$GRUPO/original/scripts/soinit.sh" "$GRUPO/$DIRBIN"
+            echo -e "INF-$(date +"%Y/%m/%d %T")-Se copio el archivo soinit.sh al directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
+            cp "$GRUPO/original/scripts/frenotp1.sh" "$GRUPO/$DIRBIN"
+            echo -e "INF-$(date +"%Y/%m/%d %T")-Se copio el archivo frenotp1.sh al directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
+            cp "$GRUPO/original/scripts/arrancotp1.sh" "$GRUPO/$DIRBIN"
+            echo -e "INF-$(date +"%Y/%m/%d %T")-Se copio el archivo arrancotp1.sh al directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
 
         else
             clear
@@ -331,7 +361,7 @@ else
         es_irreparable
         if [ $? -eq 1 ]
         then
-            echo es irreparable
+            echo No se puede reparar el programa ya que faltan archivos del directorio original, por favor descargue el programa nuevamente.
         else
             clear
             echo -e "INF-$(date +"%Y/%m/%d %T")-Se le muestra los directorios ingresados al usuario y se pide confirmacion de reparacion" >> "$GRUPO/sisop/sotp1.log"
@@ -365,62 +395,79 @@ else
                 echo -e "INF-$(date +"%Y/%m/%d %T")-El usuario confirmo los directorios. Comenzando la reparacion" >> "$GRUPO/sisop/sotp1.log"
                 if [ ! -d $DIRBIN ]
                 then 
-                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
                     mkdir -p "$DIRBIN"
                 fi
         
                 if [ ! -d $DIRMAE ]
                 then
-                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de tablas maestras" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el directorio de tablas maestras" >> "$GRUPO/sisop/sotp1.log"
                     mkdir -p "$DIRMAE"
                 fi
 
                 if [ ! -d $DIRENT ]
                 then
-                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de novedades" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el directorio de novedades" >> "$GRUPO/sisop/sotp1.log"
                     mkdir -p "$DIRENT"
                 fi
 
                 if [ ! -d "$DIRENT/ok" ]
                 then
-                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de novedades ok" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el directorio de novedades ok" >> "$GRUPO/sisop/sotp1.log"
                     mkdir -p "$DIRENT/ok"
                 fi
 
                 if [ ! -d $DIRRECH ]
                 then
-                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de rechazados" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el directorio de rechazados" >> "$GRUPO/sisop/sotp1.log"
                     mkdir -p "$DIRRECH"
                 fi
 
                 if [ ! -d $DIRPROC ]
                 then
-                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de lotes procesados" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el directorio de lotes procesados" >> "$GRUPO/sisop/sotp1.log"
                     mkdir -p "$DIRPROC"
                 fi
 
                 if [ ! -d $DIRSAL ]
                 then
-                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se creo el directorio de liquidaciones" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el directorio de liquidaciones" >> "$GRUPO/sisop/sotp1.log"
                     mkdir -p "$DIRSAL"
                 fi
 
                 if [ ! -f $DIRMAE/financiacion.txt ]
                 then
                     cp $GRUPO/original/tablas_maestras/financiacion.txt $DIRMAE
-                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se copio el archivo financiacion.txt al directorio de tablas maestras" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el archivo financiacion.txt al directorio de tablas maestras" >> "$GRUPO/sisop/sotp1.log"
                 fi
 
                 if [ ! -f $DIRMAE/terminales.txt ]
                 then
                     cp $GRUPO/original/tablas_maestras/terminales.txt $DIRMAE
-                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se copio el archivo terminales.txt al directorio de tablas maestras" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el archivo terminales.txt al directorio de tablas maestras" >> "$GRUPO/sisop/sotp1.log"
                 fi
 
                 if [ ! -f $DIRBIN/tpcuotas.sh ];then
                     cp "$GRUPO/original/scripts/tpcuotas.sh" "$DIRBIN"
-            echo -e "INF-$(date +"%Y/%m/%d %T")-Se copio el archivo tpcuotas.sh al directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el archivo tpcuotas.sh al directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
                 fi
+
+                if [ ! -f $DIRBIN/soinit.sh ];then
+                    cp "$GRUPO/original/scripts/soinit.sh" "$DIRBIN"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el archivo soinit.sh al directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
+                fi
+
+                if [ ! -f $DIRBIN/frenotp1.sh ];then
+                    cp "$GRUPO/original/scripts/frenotp1.sh" "$DIRBIN"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el archivo frenotp1.sh al directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
+                fi
+
+                if [ ! -f $DIRBIN/arrancotp1.sh ];then
+                    cp "$GRUPO/original/scripts/arrancotp1.sh" "$DIRBIN"
+                    echo -e "INF-$(date +"%Y/%m/%d %T")-Se reparo el archivo arrancotp1.sh al directorio de ejecutables" >> "$GRUPO/sisop/sotp1.log"
+                fi
+
+                echo -e "REPARACION-$(date +"%Y/%m/%d %T")-$USER" >> "$GRUPO/sisop/sotp1.conf"
             fi
         fi
     fi
