@@ -43,7 +43,7 @@ DIRCONF=${DIRCONF##*-}
 # DEBUG_CONTEXT=all			para debuguear todos los contextos
 
 DEBUG="Y"			
-DEBUG_CONTEXT="procesando_registro"	
+DEBUG_CONTEXT="all"	
 
 # Sintaxis:		debug context "[mensaje]"   (con comillas)
 # Ejemplo :		debug main "Se inicia el main con el ejecutable $0"
@@ -96,16 +96,24 @@ verificar_archivo(){
 		return 0
 	fi
 	
-	# Detección de duplicados 
-	# TODO: revisar duplicados solo en DIRPROC?
-	result=$(ls $DIRPROC | grep $1 | sed 's/.*/DUPLICADO/g' )
-	if [ ${result:-"OK"} != "DUPLICADO" ]
-	then
-		debug file_validation "El archivo [$1] es unico."
-	else
-		debug file_validation "El archivo [$1] NO es unico."
-		return 0
-	fi
+    # Detección de duplicados 
+    result=$(ls $DIRPROC | grep $1 | sed 's/.*/DUPLICADO/g' )
+    if [ ${result:-"OK"} != "DUPLICADO" ]
+    then
+        debug file_validation "El archivo [$1] es unico."
+    else
+        debug file_validation "El archivo [$1] NO es unico. Está también en $DIRPROC "
+        return 0
+    fi
+
+    result=$(ls $DIRENT/ok | grep $1 | sed 's/.*/DUPLICADO/g' )
+    if [ ${result:-"OK"} != "DUPLICADO" ]
+    then
+        debug file_validation "El archivo [$1] es unico."
+    else
+        debug file_validation "El archivo [$1] NO es unico. Está también en $DIRENT/ok "
+        return 0
+    fi
 
 	# Filtro de archivos vacíos
 	result=$( cat $DIRENT/$1 | grep -c -m 1 '.*' )
@@ -129,6 +137,23 @@ verificar_archivo(){
 }
 
 
+mover_archivo(){
+    NOMBRE=$1
+    ORIGEN=$2
+    DESTINO=$3
+    nro=$( ls $DESTINO | grep -c "$1" )
+
+    if [ $nro -eq 0 ]; then
+        mv "$ORIGEN/$NOMBRE" "$DESTINO/$NOMBRE"
+        return
+    fi
+
+    mv "$ORIGEN/$NOMBRE" "$DESTINO/$NOMBRE - $nro"
+    return 
+
+}
+
+
 clasificar_novedades(){
 
 	debug clasificar "Clasificando novedades"
@@ -144,10 +169,10 @@ clasificar_novedades(){
 			then
 				debug clasificar "Se mueve $i a $DIRENT/ok"
                 sort -o $DIRENT/$i $DIRENT/$i
-				mv $DIRENT/$i ${DIRENT:-.}/ok/$i 
+				mover_archivo $i $DIRENT $DIRENT/ok 
 			else
 				debug clasificar "Se mueve $i a $DIRRECH"
-				mv $DIRENT/$i ${DIRRECH:-.}/$i
+				mover_archivo $i $DIRENT $DIRRECH
 			fi
 		fi
 
@@ -335,7 +360,7 @@ for i in $(ls $DIRENT/ok); do
                             coef="${coef:0:4}.${coef:4:4}"
                             plan='SinPlan'
                         fi
-                    fi   	
+                    fi      
                 fi
 
                 # Calculos 
@@ -385,7 +410,6 @@ then
 fi
 
 
-a=5
 # Main Loop 
 while [[ 1 ]]; do
 	
@@ -402,17 +426,7 @@ while [[ 1 ]]; do
 		debug mainloop "Skipped the process block"
 	fi
 
-
 	sleep 2
-
-	## Corte de prueba
-	#if [ $a -gt 0 ]
-	#then 
-	#	a=`expr $a - 1`
-	#	echo $a'/2'
-	#else
-	#	exit
-	#fi
 
 done
 
