@@ -44,6 +44,15 @@
    líneas.
    
 ## 3. Reparación
+  El sistema de la reparación sirve justamtente para cuando surge algun error en algun otro script, se ejecute esto y se reparen
+  esos errores para que el programa pueda ser ejecutado nuevamente de forma correcta.
+  Una vez que se está en la terminal, se deben dirigir hacia la carpeta de "sisop" y ejecutar el script de instalación como fue explicado
+  en la sección de instalación. 
+  No hace falta pasarle nada al script ya que el mismo se da cuenta cuando hay errores en los archivos o en los directorios y los soluciona.
+  Además de eso queda todo registrado en el archivo de log de instalación pero avisando que lo que se hizo fue una reparación e indica
+  sobre que fue reparando.
+  Para ello entonces, en los otros scripts cuando surja algun error se avisará que esto tiene que ser ejecutado ya que el programa no puede
+  seguir ejecutandose normalmente.
 
 ## 4. Ejecución
 ### 4.1 Inicialización
