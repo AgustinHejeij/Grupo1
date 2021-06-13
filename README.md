@@ -49,7 +49,7 @@
   
 ### 2.1 Qué deja la instalación?
   Una vez que se ejecuta el script de instalación se crea lo siguiente:
-  - **Carpeta /bin**
+  - **Carpeta bin**
  
     - Todos los scripts estarán en esta carpeta excepto el script de instalación que esta en la carpeta sisop.
     - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRBIN)
