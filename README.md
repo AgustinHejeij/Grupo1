@@ -17,7 +17,7 @@
   
   c) Ejecutar el script de instalación:
   
-    ./sotp1.sh 
+    . ./sotp1.sh 
   
   Al ejecutar el script se tendrán que definir los directorios donde se quieran guardar ciertos archivos, por eso
   en cada caso se muestra un directorio por default y luego se podrá escribir el directorio que se requiera, tener
@@ -133,7 +133,7 @@ a) Ir a la carpeta de ejectuables
 
 b) Ejecutar el script llamado "frenotp.sh"
 
-    ./frenotp.sh
+    . ./frenotp.sh
 
 Se detenrá el proceso principal, cosnservando la inicialización del ambiente.
 
@@ -146,7 +146,7 @@ a) Ir a la carpeta de ejectuables
 
 b) Ejecutar el script llamado "arrancotp.sh"
 
-    ./arrancotp.sh
+    . ./arrancotp.sh
 
 Se verificará la correcta inicialización y se retomará la lectura/procesamiento de novedades indefinidamente.
 
