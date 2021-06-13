@@ -7,17 +7,17 @@
 
 ### 1.1 Qué deja la descarga?
   Te deja la carpeta Grupo1 donde adentro tiene las siguientes carpetas:
-  -**sisop** 
+  - **sisop** 
     Aquí dentro estará el script de instalación
-  -**original** 
+  - **original** 
     Aquí dentro están tenemos dos subcarpetas, una donde se encuentran todos los scripts y otra donde se encuentran
     todas las tablas maestras. Esta carpeta no puede ser tocar ya que en caso de errores, con esta se solucionarán.
-  -**tp1datos** 
+  - **tp1datos** 
     Aquí dentro estará el script de instalación
-  -**misdatos** 
+  - **misdatos** 
     Aquí dentro están todos los casos de prueba creados por nosotros, y se encuentran divididas en subcarpetas
     para cada caso que agregamos. 
-  -**mispruebas** 
+  - **mispruebas** 
     Aquí dentro están los resultados de las ejecuciones de las pruebas, donde están divididos en subcarpetas 
     para cada caso contemplados.
   Estos nombres de carpetas están reservados y no pueden ser utilizados, como así tambien Grupo1.
@@ -45,13 +45,13 @@
   
 ### 2.1 Qué deja la instalación?
   Una vez que se ejecuta el script de instalación se crea lo siguiente:
-  -**Carpeta /bin**
+  - **Carpeta /bin**
     - Todos los scripts estarán en esta carpeta excepto el script de instalación que esta en la carpeta sisop.
     - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRBIN)
-  -**Carpeta master**
+  - **Carpeta master**
     - Acá se encuentran las tablas maestras.
     - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRMAE)
-  -**Carpeta ENTRADATP**
+  - **Carpeta ENTRADATP**
     - Aquí dentro se deberán agregar los lotes que se quieran procesar.
     - Contiene una subcarpeta dentro llamada **ok** donde estarán todas las novedades aceptadas, luego de procesarlas.
     - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRENT)
@@ -59,10 +59,10 @@
     - Se van creando las carpetas para cada comercio donde dentro estará el archivo transacciones.rech, si es que el lote
       procesado tiene transacciones rechazadas.
     - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRRECH)      
-  -**Carpeta lotes**
+  - **Carpeta lotes**
     - Cada vez que se procese un lote, este irá a este directorio tal cual como estaba originalmente.
     - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRPROC) 
-  -**Carpeta SALIDATP**
+  - **Carpeta SALIDATP**
     - Para cada comercio, se crea un archivo con todas las transacciones ya procesadas.
     - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRSAL)        
 
