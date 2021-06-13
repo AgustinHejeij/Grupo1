@@ -7,19 +7,19 @@
 
 ### 1.1 Qué deja la descarga?
   Te deja la carpeta Grupo1 donde adentro tiene las siguientes carpetas:
-    -**sisop** 
-      Aquí dentro estará el script de instalación
-    -**original** 
-      Aquí dentro están tenemos dos subcarpetas, una donde se encuentran todos los scripts y otra donde se encuentran
-      todas las tablas maestras. Esta carpeta no puede ser tocar ya que en caso de errores, con esta se solucionarán.
-    -**tp1datos** 
-      Aquí dentro estará el script de instalación
-    -**misdatos** 
-      Aquí dentro están todos los casos de prueba creados por nosotros, y se encuentran divididas en subcarpetas
-      para cada caso que agregamos. 
-    -**mispruebas** 
-      Aquí dentro están los resultados de las ejecuciones de las pruebas, donde están divididos en subcarpetas 
-      para cada caso contemplados.
+  -**sisop** 
+    Aquí dentro estará el script de instalación
+  -**original** 
+    Aquí dentro están tenemos dos subcarpetas, una donde se encuentran todos los scripts y otra donde se encuentran
+    todas las tablas maestras. Esta carpeta no puede ser tocar ya que en caso de errores, con esta se solucionarán.
+  -**tp1datos** 
+    Aquí dentro estará el script de instalación
+  -**misdatos** 
+    Aquí dentro están todos los casos de prueba creados por nosotros, y se encuentran divididas en subcarpetas
+    para cada caso que agregamos. 
+  -**mispruebas** 
+    Aquí dentro están los resultados de las ejecuciones de las pruebas, donde están divididos en subcarpetas 
+    para cada caso contemplados.
   Estos nombres de carpetas están reservados y no pueden ser utilizados, como así tambien Grupo1.
   
 ## 2. Instalación
@@ -45,26 +45,26 @@
   
 ### 2.1 Qué deja la instalación?
   Una vez que se ejecuta el script de instalación se crea lo siguiente:
-    -**Carpeta /bin**
-      - Todos los scripts estarán en esta carpeta excepto el script de instalación que esta en la carpeta sisop.
-      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRBIN)
-    -**Carpeta master**
-      - Acá se encuentran las tablas maestras.
-      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRMAE)
-    -**Carpeta ENTRADATP**
-      - Aquí dentro se deberán agregar los lotes que se quieran procesar.
-      - Contiene una subcarpeta dentro llamada **ok** donde estarán todas las novedades aceptadas, luego de procesarlas.
-      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRENT)
-    -**Carpeta rechazos**
-      - Se van creando las carpetas para cada comercio donde dentro estará el archivo transacciones.rech, si es que el lote
+  -**Carpeta /bin**
+    - Todos los scripts estarán en esta carpeta excepto el script de instalación que esta en la carpeta sisop.
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRBIN)
+  -**Carpeta master**
+    - Acá se encuentran las tablas maestras.
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRMAE)
+  -**Carpeta ENTRADATP**
+    - Aquí dentro se deberán agregar los lotes que se quieran procesar.
+    - Contiene una subcarpeta dentro llamada **ok** donde estarán todas las novedades aceptadas, luego de procesarlas.
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRENT)
+  -**Carpeta rechazos**
+    - Se van creando las carpetas para cada comercio donde dentro estará el archivo transacciones.rech, si es que el lote
       procesado tiene transacciones rechazadas.
-      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRRECH)      
-    -**Carpeta lotes**
-      - Cada vez que se procese un lote, este irá a este directorio tal cual como estaba originalmente.
-      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRPROC) 
-    -**Carpeta SALIDATP**
-      - Para cada comercio, se crea un archivo con todas las transacciones ya procesadas.
-      - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRSAL)        
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRRECH)      
+  -**Carpeta lotes**
+    - Cada vez que se procese un lote, este irá a este directorio tal cual como estaba originalmente.
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRPROC) 
+  -**Carpeta SALIDATP**
+    - Para cada comercio, se crea un archivo con todas las transacciones ya procesadas.
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRSAL)        
 
 ### 2.2 Directorios definidos
   Si se quieren ver todos los directorios definidos se deberá hacer lo siguiente:
@@ -86,11 +86,14 @@
 ## 3. Reparación
   El sistema de la reparación sirve justamtente para cuando surge algun error en algun otro script, se ejecute esto y se reparen
   esos errores para que el programa pueda ser ejecutado nuevamente de forma correcta.
+  
   Una vez que se está en la terminal, se deben dirigir hacia la carpeta de "sisop" y ejecutar el script de instalación como fue explicado
   en la sección de instalación. 
+  
   No hace falta pasarle nada al script ya que el mismo se da cuenta cuando hay errores en los archivos o en los directorios y los soluciona.
   Además de eso queda todo registrado en el archivo de log de instalación pero avisando que lo que se hizo fue una reparación e indica
   sobre que fue reparando.
+  
   Para ello entonces, en los otros scripts cuando surja algun error se avisará que esto tiene que ser ejecutado ya que el programa no puede
   seguir ejecutandose normalmente.
 
