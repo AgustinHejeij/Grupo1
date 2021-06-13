@@ -1,16 +1,5 @@
 #TODO: escribir en el log toda la actividad
 
-# Hardcodear cuando se usen las variables de ambiente
-
-#GRUPO=
-#DIRCONF=
-#DIRBIN=
-#DIRMAE=
-#DIRENT='../ENTRADATP'
-#DIRRECH='../rechazos'
-#DIRPROC='../DIRPROC'
-#DIRSAL='../DIRSAL'
-
 DIRBIN=`grep "^DIRBIN.*$" $(dirname $PWD)/sisop/sotp1.conf`
 DIRBIN=${DIRBIN##*-}
 
@@ -34,7 +23,6 @@ GRUPO=${GRUPO##*-}
 
 DIRCONF=`grep "^DIRCONF.*$" $(dirname $PWD)/sisop/sotp1.conf`
 DIRCONF=${DIRCONF##*-}
-
 
 ####################### DEBUGUEAR ############################
 
@@ -100,9 +88,11 @@ verificar_archivo(){
     result=$(ls $DIRPROC | grep $1 | sed 's/.*/DUPLICADO/g' )
     if [ ${result:-"OK"} != "DUPLICADO" ]
     then
-        debug file_validation "El archivo [$1] es unico."
+        echo no ta en proc
+        #debug file_validation "El archivo [$1] es unico."
     else
-        debug file_validation "El archivo [$1] NO es unico. Está también en $DIRPROC "
+        echo ta en proc
+        #debug file_validation "El archivo [$1] NO es unico. Está también en $DIRPROC "
         return 0
     fi
 
@@ -125,7 +115,7 @@ verificar_archivo(){
 	fi
 
 	# Filtro de tipo de archivo 
-	result=$( file $DIRENT/$1 | grep "$DIRENT/$1.*text.*" |  sed 's/.*/OK/g' )
+	result=$( file $DIRENT/$1 | grep "$DIRENT/$1.*text.*" | sed 's/.*/OK/g' )
 	if [ ${result:-"NOT_OK"} = "OK" ]; then
 		debug file_validation "El archivo [$1] es un archivo de texto."
 	else
@@ -141,7 +131,7 @@ mover_archivo(){
     NOMBRE=$1
     ORIGEN=$2
     DESTINO=$3
-    nro=$( ls $DESTINO | grep -c "$1" )
+    nro=$( ls $DESTINO | grep -c "$1.*" )
 
     if [ $nro -eq 0 ]; then
         mv "$ORIGEN/$NOMBRE" "$DESTINO/$NOMBRE"
@@ -270,12 +260,14 @@ for i in $(ls $DIRENT/ok); do
 
                 if [ $reg_aux -gt $reg ]; then
                     #logueo los registros faltantes
+                    reg2=`echo "$reg_aux-1" | bc -l`
                     IFS=$'\n'
-                    for j in $(seq -f "%04g" $reg $((reg_aux+1))); do
+                    faltantes=""
+                    for j in $(seq -f "%04g" $reg $reg2); do
                         faltantes="$faltantes $j"
                     done
                     IFS=' '
-                    echo -e "WAR-$(date +"%Y/%m/%d %T")-Faltan los registros$faltantes en el archivo $i" >> "$DIRCONF/tpcuotas.log"
+                    echo -e "WAR-$(date +"%Y/%m/%d %T")-Faltan lo(s) registro(s)$faltantes en el archivo $i" >> "$DIRCONF/tpcuotas.log"
                     reg=$reg_aux
                 fi
                
@@ -304,15 +296,18 @@ for i in $(ls $DIRENT/ok); do
                     # Chequeo si coincide RUBRO-CUOTAS
                     lineaf=`grep "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
                     chequeo=`grep -c "^$codigorubro,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
-                    tope=`cut -d "," -f 5 <<< $lineaf`  
-                    echo $chequeo
+                    tope=`cut -d "," -f 5 <<< $lineaf`
+                    monto_int=`echo "$montotransaccion_aux+0" | bc -l`
+                    tope_int=`echo "$tope+0" | bc -l`
                     
                     if [[ ! $chequeo -eq 0 ]]; then
 
                         # Caso 1: coincide rubro y cuotas
-                        debug procesando_registro "Registro $reg del archivo $i: caso 1"                                             
+                        debug procesando_registro "Registro $reg del archivo $i: caso 1"    
+                        echo caso1 coincide rubro y cuotas                                         
                         
-                        if [[ ! $montotransaccion -gt $tope ]]; then
+                        if [[ ! $monto_int -gt $tope_int ]]; then
+                            echo caso1 monto ok
                             coef=`cut -d "," -f 4 <<< $lineaf`
                             coef="${coef:0:4}.${coef:4:4}"
                             plan=`cut -d "," -f 2 <<< $lineaf`
@@ -321,16 +316,21 @@ for i in $(ls $DIRENT/ok); do
                             lineaf=`grep "^,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
                             chequeo=`grep -c ".*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
                             nuevo_tope=`cut -d "," -f 5 <<< $lineaf`
+                            nuevo_tope_int=`echo "$nuevo_tope+0" | bc -l`
                             
                             if [[ ! $chequeo -eq 0 ]]; then
-                            
-                                if [[ ! $montotransaccion -gt $nuevo_tope ]]; then
-
+                                echo caso2 coincide cuotas con rubro vacio
+                                if [[ ! $monto_int -gt $nuevo_tope_int ]]; then
+                                    echo caso2 monto ok
                                     # Caso 2: no coincide rubro, pero sí cuotas, monto menor tope
                                     debug procesando_registro "Registro $reg del archivo $i: caso 2"
                                     coef=`cut -d "," -f 4 <<< $lineaf`
                                     coef="${coef:0:4}.${coef:4:4}"
                                     plan='Entidad'
+
+                                else
+                                    coef=1
+                                    plan="SinPlan"
                                 fi
                             fi
                         fi
@@ -341,19 +341,26 @@ for i in $(ls $DIRENT/ok); do
                         lineaf=`grep "^,.*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
                         chequeo=`grep -c ".*,$cuotas,.*$" "$DIRMAE/financiacion.txt"`
                         nuevo_tope=`cut -d "," -f 5 <<< $lineaf`
+                        nuevo_tope_int=`echo "$nuevo_tope+0" | bc -l`
                             
                         if [[ ! $chequeo -eq 0 ]]; then
-                            
-                            if [[ ! $montotransaccion -gt $nuevo_tope ]]; then
-
+                            echo caso3 coincide rubro vacio con cuota
+                            if [[ ! $monto_int -gt $nuevo_tope_int ]]; then
+                                echo caso3 monto ok
                                 # Caso 2: no coincide rubro, pero sí cuotas, monto menor tope
                                 debug procesando_registro "Registro $reg del archivo $i: caso 2"
                                 coef=`cut -d "," -f 4 <<< $lineaf`
                                 coef="${coef:0:4}.${coef:4:4}"
                                 plan='Entidad'
+    
+                            else 
+                                coef=1
+                                coef="${coef:0:4}.${coef:4:4}"
+                                plan='SinPlan'
                             fi
+                           
                         else
-
+                            echo caso4 no coincide nada
                             # Caso 3: no coincide rubro y ni cuotas (sin interes)
                             debug procesando_registro "Registro $reg del archivo $i: caso 3"
                             coef=1
@@ -421,9 +428,6 @@ while [[ 1 ]]; do
 
 		clasificar_novedades
 		procesar_novedaes
-
-	else 
-		debug mainloop "Skipped the process block"
 	fi
 
 	sleep 2
