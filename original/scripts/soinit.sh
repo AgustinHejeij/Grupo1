@@ -6,26 +6,92 @@ check_instalacion(){
     fi
     
     echo "ERR-$(date +"%Y/%m/%d %T")-No se ha instalado correctamente" >> "$BASE/soinit.log"
-    echo "INF-$(date +"%Y/%m/%d %T")-Por favor reinstale el programa con el script 'sotp1.sh'" >> "$BASE/soinit.log"
+    echo "No se encontro el archivo de configuracion, instale el programa con el archivo sotp1.sh"
     return 0
 }
 
 check_archivos(){
     
-    echo "INF-$(date +"%Y/%m/%d %T")-Chequeando la existencia de las tablas maestras" >> "$BASE/soinit.log"  
+    bbb=1
+    echo "INF-$(date +"%Y/%m/%d %T")-Chequeando la existencia de los archivos" >> "$BASE/soinit.log"  
 
     if [ ! -f "$DIRMAE/financiacion.txt" ]; then
-        echo "WAR-$(date +"%Y/%m/%d %T")-No existe la tabla maestra financiacion.txt" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Copiar de original/tablas_maestras el archivo financiacion.txt y pegarlo en DIRMAE" >> "$BASE/soinit.log"          
-        return 0     
-    elif [ ! -f "$DIRMAE/terminales.txt" ]; then
-        echo "WAR-$(date +"%Y/%m/%d %T")-No existe la tabla maestra terminales.txt" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Copiar de original/tablas_maestras el archivo terminales.txt y pegarlo en DIRMAE" >> "$BASE/soinit.log"
-        return 0
+        echo "ERR-$(date +"%Y/%m/%d %T")-No existe la tabla maestra financiacion.txt" >> "$BASE/soinit.log"
+        echo Archivo de financiacion inexistente       
+        bbb=0 
+    fi 
+   
+    if [ ! -f "$DIRMAE/terminales.txt" ]; then
+        echo "ERR-$(date +"%Y/%m/%d %T")-No existe la tabla maestra terminales.txt" >> "$BASE/soinit.log"
+        echo Archivo de terminales inexistente
+        bbb=0
     fi
-    return 1
+    
+    if [ ! -f "$DIRBIN/tpcuotas.sh" ]; then
+        echo "ERR-$(date +"%Y/%m/%d %T")-No existe el archivo tpcuotas.sh" >> "$BASE/soinit.log"
+        echo "Archivo tpcuotas.sh inexistente"
+        bbb=0
+    fi
+
+    if [ ! -f "$DIRBIN/arrancotp1.sh" ]; then
+        echo "ERR-$(date +"%Y/%m/%d %T")-No existe el archivo arrancotp1.sh" >> "$BASE/soinit.log"
+        echo "Archivo de arrancotp1.sh inexistente"
+        bbb=0
+    fi
+
+    if [ ! -f "$DIRBIN/frenotp1.sh" ]; then
+        echo "ERR-$(date +"%Y/%m/%d %T")-No existe el archivo frenotp1.sh" >> "$BASE/soinit.log"
+        echo "Archivo frenotp1.sh inexistente"
+        bbb=0
+    fi
+    return $bbb
 }
 
+check_directorios(){
+    asd=1
+    if [ ! -d $GRUPO ]; then 
+        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio $GRUPO inexistente" >> "$BASE/soinit.log"   
+        echo Directorio grupo inexistente
+        asd=0
+    fi
+	if [ ! -d $DIRCONF ]; then 
+        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio donde se encuentra el archivo de configuración (DIRCONF) inexistente" >> "$BASE/soinit.log"   
+        echo Directorio $DIRCONF inexistente 
+        asd=0
+    fi
+	if [ ! -d $DIRBIN ]; then 
+        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de ejecutables (DIRBIN) inexistente" >> "$BASE/soinit.log"
+        echo Directorio $DIRBIN inexistente
+        asd=0
+    fi
+	if [ ! -d $DIRMAE ]; then 
+        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de tablas maestras (DIRMAE) inexistente" >> "$BASE/soinit.log"
+        echo Directorio $DIRMAE inexistente
+        asd=0
+    fi
+	if [ ! -d $DIRENT ]; then 
+        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de entrada (DIRENT) inexistente" >> "$BASE/soinit.log"
+        echo Directorio $DIRENT inexistente
+        asd=0
+    fi
+	if [ ! -d $DIRRECH ]; then 
+        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de rechazados (DIRRECH) inexistente" >> "$BASE/soinit.log"
+        echo Directorio $DIRRECH inexistente
+        asd=0
+    fi
+	if [ ! -d $DIRPROC ]; then 
+        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de salida inexistente" >> "$BASE/soinit.log"
+        echo Directorio $DIRPROC inexistente
+        asd=0
+    fi
+	if [ ! -d $DIRSAL ]; then 
+        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de salida (DIRSAL) inexistente" >> "$BASE/soinit.log"
+        echo Directorio $DIRSAL inexistente
+        asd=0;
+    fi
+    
+    return $asd
+}
 
 # ** Definición de variables **
 definir_variables(){
@@ -56,59 +122,32 @@ definir_variables(){
     DIRCONF=`grep "^DIRCONF.*$" $BASE/sotp1.conf`
     DIRCONF=${DIRCONF##*-}
 
-    if [ -z "$GRUPO" ]; then 
-        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio GRUPO inexistente" >> "$BASE/soinit.log"   
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Poner en el archivo de configuración 'GRUPO-Directorio'" >> "$BASE/soinit.log"
-        return 0
-	elif [ -z "$DIRCONF" ]; then 
-        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio donde se encuentra el archivo de configuración (DIRCONF) inexistente" >> "$BASE/soinit.log"   
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Poner en el archivo de configuración 'DIRCONF-Directorio'" >> "$BASE/soinit.log"    
-        return 0
-	elif [ -z "$DIRBIN" ]; then 
-        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de ejecutables (DIRBIN) inexistente" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Poner en el archivo de configuración 'DIRBIN-Directorio'" >> "$BASE/soinit.log"
-        return 0
-	elif [ -z "$DIRMAE" ]; then 
-        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de tablas maestras (DIRMAE) inexistente" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Poner en el archivo de configuración 'DIRMAE-Directorio'" >> "$BASE/soinit.log"
-        return 0
-	elif [ -z "$DIRENT" ]; then 
-        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de entrada (DIRENT) inexistente" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Poner en el archivo de configuración 'DIRSAL-Directorio'" >> "$BASE/soinit.log"
-        return 0
-	elif [ -z "$DIRRECH" ]; then 
-        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de rechazados (DIRRECH) inexistente" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Poner en el archivo de configuración 'DIRRECH-Directorio'" >> "$BASE/soinit.log"
-        return 0
-	elif [ -z "$DIRPROC" ]; then 
-        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de salida inexistente" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Poner en el archivo de configuración 'DIRSAL-Directorio'" >> "$BASE/soinit.log"
-        return 0
-	elif [ -z "$DIRSAL" ]; then 
-        echo "ERR-$(date +"%Y/%m/%d %T")-Directorio de salida (DIRSAL) inexistente" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Solución: Poner en el archivo de configuración 'DIRSAL-Directorio'" >> "$BASE/soinit.log"
-        return 0;
-	else 
+    check_directorios
+
+    if [ $? -eq 1 ]; then
         check_archivos
         if [ $? -eq 1 ]; then
             echo "INF-$(date +"%Y/%m/%d %T")-Archivo de configuración correcto, instalación correcta" >> "$BASE/soinit.log"
             echo "Directorios correctos"
+            echo "INF-$(date +"%Y/%m/%d %T")-Todos los archivos presentes" >> "$BASE/soinit.log"
+            echo "Archivos correctos"
             echo "INF-$(date +"%Y/%m/%d %T")-Variables de ambiente definidas correctamente" >> "$BASE/soinit.log"
             echo "Variables de ambiente configuradas"
             
         
-            export GRUPO=$GRUPO
-            export DIRCONF=$DIRCONF
-            export DIRBIN=$DIRBIN
-            export DIRMAE=$DIRMAE
-            export DIRENT=$DIRENT
-            export DIRRECH=$DIRRECH
-            export DIRPROC=$DIRPROC
-            export DIRSAL=$DIRSAL
+            GRUPO=$GRUPO
+            DIRCONF=$DIRCONF
+            DIRBIN=$DIRBIN
+            DIRMAE=$DIRMAE
+            DIRENT=$DIRENT
+            DIRRECH=$DIRRECH
+            DIRPROC=$DIRPROC
+            DIRSAL=$DIRSAL
 
             return 1
         fi 
 	fi
+    echo "Para reparar el programa, navegue hacia $DIRCONF y tipee bash sotp1.sh, finalizando ejecucion..."
     return 0    
 }
 
@@ -131,40 +170,45 @@ permisos_arch(){
     echo "INF-$(date +"%Y/%m/%d %T")-Permiso de lectura para la tabla maestra 'terminales.txt' asignado" >> "$BASE/soinit.log"  
     
     echo "INF-$(date +"%Y/%m/%d %T")-Fueron asignados los permisos de los archivos" >> "$BASE/soinit.log"
-    echo "Permisos dados con éxito"
+    echo Permisos dados correctamente
 }
 
 ejecutar_proceso_ppal(){
-    
-    TP_IN_EJEC=`ps -f | grep -c  ./tpcuotas.sh`
-
-    if [ $TP_IN_EJEC -eq 1 ]; then
-        echo "INF-$(date +"%Y/%m/%d %T")-Listo para ejecutar el proceso principal" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Se tiene de 'arrancotp1' para reanudar el proceso ante un freno de 'frenotp1'" >> "$BASE/soinit.log"
-        echo "Se dispone de 'arrancotp1' para reanudar el proceso ante un freno de 'frenotp1'"
-        
-        ## CHEQUEAR ESTO FIJA!!!!
-        ./tpcuotas.sh &
-    else
-        echo "ERR-$(date +"%Y/%m/%d %T")-El proceso principal ya se encuentra en ejecución" >> "$BASE/soinit.log"
-        echo "INF-$(date +"%Y/%m/%d %T")-Si lo que se quiere es inicializar el ambiente ejecute el comando 'frenotp1'y vuelva a ejecutar este script" >> "$BASE/soinit.log"
-    fi
+    echo "INF-$(date +"%Y/%m/%d %T")-Listo para ejecutar el proceso principal" >> "$BASE/soinit.log"
+    echo Inicializando el proceso principal...
+            
+    ## CHEQUEAR ESTO FIJA!!!!
+    . ./tpcuotas.sh &
+    TP_IN_EJEC=$!
+    AMBIENTE=1
+    echo Proceso principal iniciado correctamente
+    echo "Se dispone de '. ./arrancotp1' para reanudar el proceso ante un freno de '. ./frenotp1'"
+    echo "El process id del proceso principal es $TP_IN_EJEC"
+    echo "INF-$(date +"%Y/%m/%d %T")-El pid asignado al proceso principal es $TP_IN_EJEC" >> "$BASE/soinit.log"
 }
 
 BASE="../sisop"
 echo "INF-$(date +"%Y/%m/%d %T")-El usuario $USER inicializó el ambiente+" >> "$BASE/soinit.log"
 
-## chequeo instalación
-check_instalacion
-if [ $? -eq 1 ]; then
-    ## defino las variables
-    definir_variables
+if [ ! -z "$TP_IN_EJEC" ]; then
+    echo "WAR-$(date +"%Y/%m/%d %T")-El proceso principal ya se encuentra en ejecución" >> "$BASE/soinit.log"
+    echo "El proceso principal ya esta corriendo. Tipee . ./frenotp1.sh para frenarlo y luego poder iniciarlo de nuevo"
+elif [ ! -z "$AMBIENTE" ]; then
+    echo "El ambiente ya se encuentra inicializado, si quiere iniciar el programa tipee . ./arrancotp1"
+    echo Si lo que quiere es inicializar de nuevo el ambiente, cierre la terminal y corra este archivo en una nueva terminal
+else
+    ## chequeo instalación
+    check_instalacion
     if [ $? -eq 1 ]; then
-        ## le doy permisos a los archivos
-        permisos_arch
+        ## defino las variables
+        definir_variables
+        if [ $? -eq 1 ]; then
+            ## le doy permisos a los archivos
+            permisos_arch
 
-        ## corro el proceso principal en bg
-        ejecutar_proceso_ppal
+            ## corro el proceso principal en bg
+            ejecutar_proceso_ppal
+        fi
     fi
 fi
 
