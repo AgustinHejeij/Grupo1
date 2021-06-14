@@ -109,7 +109,7 @@ clasificar_novedades(){
 
 			if [ $? -eq 1 ]
 			then
-				echo -e "INF-$(date +"%Y/%m/%d %T")-Se mueve $i a $DIRENT/ok" >> "$DIRCONF/tpcuotas.log"
+				echo -e "INF-$(date +"%Y/%m/%d %T")-Se acepto el archivo $i. Se mueve a $DIRENT/ok" >> "$DIRCONF/tpcuotas.log"
                 sort -o $DIRENT/$i $DIRENT/$i
 				mover_archivo $i $DIRENT $DIRENT/ok 
 			else
