@@ -162,9 +162,46 @@
     more tpcuotas.log
   
   Y misma forma de navegación que mencionamos antes.
- 
+
+### 4.3 Detención manual
+  Como se explicó en la sección de inicialización, el programa principal comienza a correr en segundo plano automáticamente, por lo que estará buscando y procesando novedades   indefinidamente. Si se quiere pausar la ejecución, entonces se debe realizar lo siguiente:
+
+  a) Ir a la carpeta de ejectuables
+
+      cd $GRUPO1/bin
+
+  b) Ejecutar el script llamado "frenotp.sh"
+
+      . ./frenotp1.sh
+
+  Se detenrá el proceso principal, cosnservando la inicialización del ambiente.
+
+### 4.4 Reanudación manual
+  En caso que se desee reanudar el proceseso principal, se debe ejecutar el script correspondiente:
+
+  a) Ir a la carpeta de ejectuables
+
+      cd $GRUPO1/bin
+
+  b) Ejecutar el script llamado "arrancotp.sh"
+
+      . ./arrancotp1.sh
+
+  Se verificará la correcta inicialización y se retomará la lectura/procesamiento de novedades indefinidamente.
+
+## 5. Ejecución de las pruebas
+  En la carpeta **misdatos** como ya explicamos se encuentran subcarpetas con casos de prueba, donde cada subcarpeta
+  representa un caso que nos interesaba mostrar y el nombre de cada subcarpeta introduce a ese caso.
+
+  Lo cual para realizar estas pruebas como tienen archivos con nombres distintos podes pasar todos esos lotes a la
+  carpeta del directorio donde se tiene **DIRENT**, ejecutar el inicializador que abrira el proceso principal y el mismo
+  procesará todos estos casos y los enviará a la carpeta de procesados en el caso de transacciones correctas y para los
+  casos que agregamos que contienen errores se verá tanto por pantalla como por el log de ejecución. 
   
-#### 4.2.2 Efectuar una prueba completa
+  De este modo quedan por mostrados los casos de errores que pueden estar y porque suceden, y tambien casos donde hay
+  transacciones correctas con distintos montos y cuotas. Ahora explicaremos paso a paso.
+  
+  #### 5.1 Efectuar una prueba completa
   Para poder probar por completo la funcionalidad del programa se puede seguir el siguiente flujo:
 
   a) Asegurar que el mismo este correctamente instalado e inicializado.
@@ -185,40 +222,3 @@
 
   h) Cuando se quiera abandonar la sesión y borrar el ambiente del programa, se puede cerrar la terminal.
 
-### 4.3 Detención manual
-  Como se explicó en la sección de inicialización, el programa principal comienza a correr en segundo plano automáticamente, por lo que estará buscando y procesando novedades   indefinidamente. Si se quiere pausar la ejecución, entonces se debe realizar lo siguiente:
-
-  a) Ir a la carpeta de ejectuables
-
-      cd $GRUPO1/bin
-
-  b) Ejecutar el script llamado "frenotp.sh"
-
-      . ./frenotp.sh
-
-  Se detenrá el proceso principal, cosnservando la inicialización del ambiente.
-
-### 4.4 Reanudación manual
-  En caso que se desee reanudar el proceseso principal, se debe ejecutar el script correspondiente:
-
-  a) Ir a la carpeta de ejectuables
-
-      cd $GRUPO1/bin
-
-  b) Ejecutar el script llamado "arrancotp.sh"
-
-      . ./arrancotp.sh
-
-  Se verificará la correcta inicialización y se retomará la lectura/procesamiento de novedades indefinidamente.
-
-## 5. Ejecución de las pruebas
-  En la carpeta **misdatos** como ya explicamos se encuentran subcarpetas con casos de prueba, donde cada subcarpeta
-  representa un caso que nos interesaba mostrar y el nombre de cada subcarpeta introduce a ese caso.
-
-  Lo cual para realizar estas pruebas como tienen archivos con nombres distintos podes pasar todos esos lotes a la
-  carpeta del directorio donde se tiene **DIRENT**, ejecutar el inicializador que abrira el proceso principal y el mismo
-  procesará todos estos casos y los enviará a la carpeta de procesados en el caso de transacciones correctas y para los
-  casos que agregamos que contienen errores se verá tanto por pantalla como por el log de ejecución. 
-  
-  De este modo quedan por mostrados los casos de errores que pueden estar y porque suceden, y tambien casos donde hay
-  transacciones correctas con distintos montos y cuotas.
