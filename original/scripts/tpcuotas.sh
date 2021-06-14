@@ -202,7 +202,6 @@ for i in $(ls $DIRENT/ok); do
 
             elif [[ $lookup -eq 0 ]]; then
                 #no existe la combinacion codigo de comercio - terminal
-                echo "$codigo-$terminal"
                 if [ ! -f $DIRRECH/C$num_lot ]; then
                     mkdir -p $DIRRECH/C$num_lot
                 fi
