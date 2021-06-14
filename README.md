@@ -38,7 +38,7 @@
   
   c) Ejecutar el script de instalación:
   
-    . ./sotp1.sh 
+    bash sotp1.sh 
   
   Al ejecutar el script se tendrán que definir los directorios donde se quieran guardar ciertos archivos, por eso
   en cada caso se muestra un directorio por default y luego se podrá escribir el directorio que se requiera, tener
@@ -165,50 +165,60 @@
  
   
 #### 4.2.2 Efectuar una prueba completa
-Para poder probar por completo la funcionalidad del programa se puede seguir el siguiente flujo:
+  Para poder probar por completo la funcionalidad del programa se puede seguir el siguiente flujo:
 
-a) Asegurar que el mismo este correctamente instalado e inicializado.
+  a) Asegurar que el mismo este correctamente instalado e inicializado.
 
-b) Iniciar el proceso principal, ya sea mediante el incializador (4.2) o el script arrancotp.sh (4.4).
+  b) Iniciar el proceso principal, ya sea mediante el incializador (4.2) o el script arrancotp.sh (4.4).
 
-c) Depositar uno o varios archivos en la carpeta elegida para la entrada del programa (por defecto DIRENT)
+  c) Depositar uno o varios archivos en la carpeta elegida para la entrada del programa (por defecto DIRENT)
 
-d) Se puede observar como se irán clasificando según si fueron aceptados o no en las carpetas corresponidentes (por defecto DIRENT/ok ó DIRRECH).
+  d) Se puede observar como se irán clasificando según si fueron aceptados o no en las carpetas corresponidentes (por defecto DIRENT/ok ó DIRRECH).
 
-c) Los archivos aceptados son procesados de a uno.
+  c) Los archivos aceptados son procesados de a uno.
 
-e) Se puede observar como los archivos ya procesados son movidos a la carpeta elegida para los archivos de salida (por defecto DIRSAL)
+  e) Se puede observar como los archivos ya procesados son movidos a la carpeta elegida para los archivos de salida (por defecto DIRSAL)
 
-f) Para obtener detalles de la clasificación, validación y procesamiento, se consulta el archivo del log tpcuotas.log.
+  f) Para obtener detalles de la clasificación, validación y procesamiento, se consulta el archivo del log tpcuotas.log.
 
-g) Una vez finalizado todo el procesamiento de las pruebas, se puede frenar el programa con el script frenotp.sh (4.3)
+  g) Una vez finalizado todo el procesamiento de las pruebas, se puede frenar el programa con el script frenotp.sh (4.3)
 
-h) Cuando se quiera abandonar la sesión y borrar el ambiente del programa, se puede cerrar la terminal.
+  h) Cuando se quiera abandonar la sesión y borrar el ambiente del programa, se puede cerrar la terminal.
 
 ### 4.3 Detención manual
-Como se explicó en la sección de inicialización, el programa principal comienza a correr en segundo plano automáticamente, por lo que estará buscando y procesando novedades indefinidamente. Si se quiere pausar la ejecución, entonces se debe realizar lo siguiente:
+  Como se explicó en la sección de inicialización, el programa principal comienza a correr en segundo plano automáticamente, por lo que estará buscando y procesando novedades   indefinidamente. Si se quiere pausar la ejecución, entonces se debe realizar lo siguiente:
 
-a) Ir a la carpeta de ejectuables
-  
-    cd $GRUPO1/bin
+  a) Ir a la carpeta de ejectuables
 
-b) Ejecutar el script llamado "frenotp.sh"
+      cd $GRUPO1/bin
 
-    . ./frenotp.sh
+  b) Ejecutar el script llamado "frenotp.sh"
 
-Se detenrá el proceso principal, cosnservando la inicialización del ambiente.
+      . ./frenotp.sh
+
+  Se detenrá el proceso principal, cosnservando la inicialización del ambiente.
 
 ### 4.4 Reanudación manual
-En caso que se desee reanudar el proceseso principal, se debe ejecutar el script correspondiente:
+  En caso que se desee reanudar el proceseso principal, se debe ejecutar el script correspondiente:
 
-a) Ir a la carpeta de ejectuables
-  
-    cd $GRUPO1/bin
+  a) Ir a la carpeta de ejectuables
 
-b) Ejecutar el script llamado "arrancotp.sh"
+      cd $GRUPO1/bin
 
-    . ./arrancotp.sh
+  b) Ejecutar el script llamado "arrancotp.sh"
 
-Se verificará la correcta inicialización y se retomará la lectura/procesamiento de novedades indefinidamente.
+      . ./arrancotp.sh
+
+  Se verificará la correcta inicialización y se retomará la lectura/procesamiento de novedades indefinidamente.
 
 ## 5. Ejecución de las pruebas
+  En la carpeta **misdatos** como ya explicamos se encuentran subcarpetas con casos de prueba, donde cada subcarpeta
+  representa un caso que nos interesaba mostrar y el nombre de cada subcarpeta introduce a ese caso.
+
+  Lo cual para realizar estas pruebas como tienen archivos con nombres distintos podes pasar todos esos lotes a la
+  carpeta del directorio donde se tiene **DIRENT**, ejecutar el inicializador que abrira el proceso principal y el mismo
+  procesará todos estos casos y los enviará a la carpeta de procesados en el caso de transacciones correctas y para los
+  casos que agregamos que contienen errores se verá tanto por pantalla como por el log de ejecución. 
+  
+  De este modo quedan por mostrados los casos de errores que pueden estar y porque suceden, y tambien casos donde hay
+  transacciones correctas con distintos montos y cuotas.
