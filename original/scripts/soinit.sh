@@ -148,6 +148,7 @@ definir_variables(){
         fi 
 	fi
     echo "Para reparar el programa, navegue hacia $DIRCONF y tipee bash sotp1.sh, finalizando ejecucion..."
+    echo "ERR-$(date +"%Y/%m/%d %T")-No se pudo realizar la inicializacion correctamente, Finaliza la ejecucion" >> "$BASE/soinit.log"
     return 0    
 }
 
@@ -178,9 +179,9 @@ ejecutar_proceso_ppal(){
     echo Inicializando el proceso principal...
             
     ## CHEQUEAR ESTO FIJA!!!!
+    AMBIENTE=1
     . ./tpcuotas.sh &
     TP_IN_EJEC=$!
-    AMBIENTE=1
     echo Proceso principal iniciado correctamente
     echo "Se dispone de '. ./arrancotp1' para reanudar el proceso ante un freno de '. ./frenotp1'"
     echo "El process id del proceso principal es $TP_IN_EJEC"
@@ -188,15 +189,17 @@ ejecutar_proceso_ppal(){
 }
 
 BASE="../sisop"
-echo "INF-$(date +"%Y/%m/%d %T")-El usuario $USER inicializó el ambiente+" >> "$BASE/soinit.log"
+
 
 if [ ! -z "$TP_IN_EJEC" ]; then
-    echo "WAR-$(date +"%Y/%m/%d %T")-El proceso principal ya se encuentra en ejecución" >> "$BASE/soinit.log"
+    echo "WAR-$(date +"%Y/%m/%d %T")-El proceso principal ya se encuentra en ejecución, no se hace nada" >> "$BASE/soinit.log"
     echo "El proceso principal ya esta corriendo. Tipee . ./frenotp1.sh para frenarlo y luego poder iniciarlo de nuevo"
 elif [ ! -z "$AMBIENTE" ]; then
+    echo "WAR-$(date +"%Y/%m/%d %T")-El ambiente ya se encuentra inicializado, no se hace nada" >> "$BASE/soinit.log"
     echo "El ambiente ya se encuentra inicializado, si quiere iniciar el programa tipee . ./arrancotp1"
     echo Si lo que quiere es inicializar de nuevo el ambiente, cierre la terminal y corra este archivo en una nueva terminal
 else
+    echo "INF-$(date +"%Y/%m/%d %T")-El usuario $USER inicializó el ambiente" >> "$BASE/soinit.log"
     ## chequeo instalación
     check_instalacion
     if [ $? -eq 1 ]; then

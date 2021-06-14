@@ -129,16 +129,26 @@ then
         echo Defina el nombre del directorio de ejecutables \(actualmente es $DIRBIN, si quiere usarlo presione ENTER sin escribir nada\):
         echo -e "INF-$(date +"%Y/%m/%d %T")-Se le solicita el directorio de ejecutables al usuario" >> "$GRUPO/sisop/sotp1.log"
         read DIRBIN_aux
-        while [[ ($DIRBIN_aux = "original") || ($DIRBIN_aux = "sisop") || ($DIRBIN_aux = "tp1datos") || ($DIRBIN_aux = "misdatos") || ($DIRBIN_aux = "mispruebas") || ($DIRBIN_aux = $DIRMAE) || ($DIRBIN_aux = $DIRENT) || ($DIRBIN_aux = $DIRRECH) || ($DIRBIN_aux = $DIRPROC) || ($DIRBIN_aux = $DIRSAL) || ($DIRBIN_aux = "Grupo1") ]]
+        espacios=`grep -c ".* .*" <<< $DIRBIN_aux`
+        guiones=`grep -c ".*-.*" <<< $DIRBIN_aux`
+        barras=`grep -c ".*/.*" <<< $DIRBIN_aux`
+        let suma=$espacios+$guiones+$barras
+        while [[ ($DIRBIN_aux = "original") || ($DIRBIN_aux = "sisop") || ($DIRBIN_aux = "tp1datos") || ($DIRBIN_aux = "misdatos") || ($DIRBIN_aux = "mispruebas") || ($DIRBIN_aux = $DIRMAE) || ($DIRBIN_aux = $DIRENT) || ($DIRBIN_aux = $DIRRECH) || ($DIRBIN_aux = $DIRPROC) || ($DIRBIN_aux = $DIRSAL) || ($DIRBIN_aux = "Grupo1") || ($suma -gt 0) ]]
         do
             echo -e "ERR-$(date +"%Y/%m/%d %T")-El valor $DIRBIN_aux ingresado para el directorio de ejecutables es erroneo. Se solicita otro nombre al usuario\n" >> "$GRUPO/sisop/sotp1.log"
             if [[ ($DIRBIN_aux = "original") || ($DIRBIN_aux = "sisop") || ($DIRBIN_aux = "tp1datos") || ($DIRBIN_aux = "misdatos") || ($DIRBIN_aux = "mispruebas") || ($DIRBIN_aux = "Grupo1") ]]
             then
                 echo $DIRBIN_aux es un valor reservado. Defina el nombre del directorio de ejecutables \(actualmente es $DIRBIN, si quiere usarlo presione enter sin escribir nada\):
+            elif [ $suma -gt 0 ]; then
+                echo "$DIRBIN_aux contiene caracteres invalidos (no se pueden usar espacios, guiones medios o barras como /). Defina el nombre del directorio de ejecutables \(actualmente es $DIRBIN, si quiere usarlo presione enter sin escribir nada\):"
             else
                 echo $DIRBIN_aux ya ha sido usado para otro directorio. Defina el nombre del directorio de ejecutables \(actualmente es $DIRBIN, si quiere usarlo presione enter sin escribir nada\):
             fi
             read DIRBIN_aux
+            espacios=`grep -c ".* .*" <<< $DIRBIN_aux`
+            guiones=`grep -c ".*-.*" <<< $DIRBIN_aux`
+            barras=`grep -c ".*/.*" <<< $DIRBIN_aux`
+            let suma=$espacios+$guiones+$barras
         done
         if [ ! $DIRBIN_aux = "^$" ]
         then
@@ -149,16 +159,26 @@ then
         echo Defina el nombre del directorio de tablas del sistema \(actualmente es $DIRMAE, si quiere usarlo presione ENTER sin escribir nada\):
         echo -e "INF-$(date +"%Y/%m/%d %T")-Se le solicita el directorio de tablas maestras al usuario" >> "$GRUPO/sisop/sotp1.log"
         read DIRMAE_aux
-        while [[ ($DIRMAE_aux = "original") || ($DIRMAE_aux = "sisop") || ($DIRMAE_aux = "tp1datos") || ($DIRMAE_aux = "misdatos") || ($DIRMAE_aux = "mispruebas") || ($DIRMAE_aux = $DIRBIN) || ($DIRMAE_aux = $DIRENT) || ($DIRMAE_aux = $DIRRECH) || ($DIRMAE_aux = $DIRPROC) || ($DIRMAE_aux = $DIRSAL) || ($DIRMAE_aux = "Grupo1") ]]
+        espacios=`grep -c ".* .*" <<< $DIRMAE_aux`
+        guiones=`grep -c ".*-.*" <<< $DIRMAE_aux`
+        barras=`grep -c ".*/.*" <<< $DIRMAE_aux`
+        let suma=$espacios+$guiones+$barras
+        while [[ ($DIRMAE_aux = "original") || ($DIRMAE_aux = "sisop") || ($DIRMAE_aux = "tp1datos") || ($DIRMAE_aux = "misdatos") || ($DIRMAE_aux = "mispruebas") || ($DIRMAE_aux = $DIRBIN) || ($DIRMAE_aux = $DIRENT) || ($DIRMAE_aux = $DIRRECH) || ($DIRMAE_aux = $DIRPROC) || ($DIRMAE_aux = $DIRSAL) || ($DIRMAE_aux = "Grupo1") || ($suma -gt 0) ]]
         do
             echo -e "ERR-$(date +"%Y/%m/%d %T")-El valor $DIRMAE_aux ingresado para el directorio de tablas maestras es erroneo. Se solicita otro nombre al usuario" >> "$GRUPO/sisop/sotp1.log"
             if [[ ($DIRMAE_aux = "original") || ($DIRMAE_aux = "sisop") || ($DIRMAE_aux = "tp1datos") || ($DIRMAE_aux = "misdatos") || ($DIRMAE_aux = "mispruebas") ]]
             then
                 echo $DIRMAE_aux es un valor reservado. Defina el nombre del directorio de tablas del sistema \(actualmente es $DIRMAE, si quiere usarlo presione ENTER sin escribir nada\):
+            elif [ $suma -gt 0 ]; then
+                echo "$DIRMAE_aux contiene caracteres invalidos (no se pueden usar espacios, guiones medios o barras como /). Defina el nombre del directorio de tablas maestras \(actualmente es $DIRMAE, si quiere usarlo presione enter sin escribir nada\):"
             else
                 echo $DIRMAE_aux ya ha sido usado para otro directorio. Defina el nombre del directorio de tablas del sistema \(actualmente es $DIRMAE, si quiere usarlo presione ENTER sin escribir nada\):
             fi
             read DIRMAE_aux
+            espacios=`grep -c ".* .*" <<< $DIRMAE_aux`
+            guiones=`grep -c ".*-.*" <<< $DIRMAE_aux`
+            barras=`grep -c ".*/.*" <<< $DIRMAE_aux`
+            let suma=$espacios+$guiones+$barras
         done
         if [ ! $DIRMAE_aux = "^$" ]
         then
@@ -169,16 +189,26 @@ then
         echo Defina el nombre del directorio de novedades \(actualmente es $DIRENT, si quiere usarlo presione ENTER sin escribir nada\):
         echo -e "INF-$(date +"%Y/%m/%d %T")-Se le solicita el directorio de novedades al usuario" >> "$GRUPO/sisop/sotp1.log"
         read DIRENT_aux
-        while [[ ($DIRENT_aux = "original") || ($DIRENT_aux = "sisop") || ($DIRENT_aux = "tp1datos") || ($DIRENT_aux = "misdatos") || ($DIRENT_aux = "mispruebas") || ($DIRENT_aux = $DIRBIN) || ($DIRENT_aux = $DIRMAE) || ($DIRENT_aux = $DIRRECH) || ($DIRENT_aux = $DIRPROC) || ($DIRENT_aux = $DIRSAL) || ($DIRENT_aux = "Grupo1") ]]
+        espacios=`grep -c ".* .*" <<< $DIRENT_aux`
+        guiones=`grep -c ".*-.*" <<< $DIRENT_aux`
+        barras=`grep -c ".*/.*" <<< $DIRENT_aux`
+        let suma=$espacios+$guiones+$barras
+        while [[ ($DIRENT_aux = "original") || ($DIRENT_aux = "sisop") || ($DIRENT_aux = "tp1datos") || ($DIRENT_aux = "misdatos") || ($DIRENT_aux = "mispruebas") || ($DIRENT_aux = $DIRBIN) || ($DIRENT_aux = $DIRMAE) || ($DIRENT_aux = $DIRRECH) || ($DIRENT_aux = $DIRPROC) || ($DIRENT_aux = $DIRSAL) || ($DIRENT_aux = "Grupo1") || ($suma -gt 0) ]]
         do
             echo -e "ERR-$(date +"%Y/%m/%d %T")-El valor $DIRENT_aux ingresado para el directorio de novedades es erroneo. Se solicita otro nombre al usuario" >> "$GRUPO/sisop/sotp1.log"
             if [[ ($DIRENT_aux = "original") || ($DIRENT_aux = "sisop") || ($DIRENT_aux = "tp1datos") || ($DIRENT_aux = "misdatos") || ($DIRENT_aux = "mispruebas") || ($DIRENT_aux = "Grupo1") ]]
             then
                 echo $DIRENT_aux es un valor reservado. Defina el nombre del directorio de novedades \(actualmente es $DIRENT, si quiere usarlo presione ENTER sin escribir nada\):
+            elif [ $suma -gt 0 ]; then
+                echo "$DIRENT_aux contiene caracteres invalidos (no se pueden usar espacios, guiones medios o barras como /). Defina el nombre del directorio de novedades \(actualmente es $DIRENT, si quiere usarlo presione enter sin escribir nada\):"
             else
                 echo $DIRENT_aux ya ha sido usado para otro directorio. Defina el nombre del directorio de novedades \(actualmente es $DIRENT, si quiere usarlo presione ENTER sin escribir nada\):
             fi
             read DIRENT_aux
+            espacios=`grep -c ".* .*" <<< $DIRENT_aux`
+            guiones=`grep -c ".*-.*" <<< $DIRENT_aux`
+            barras=`grep -c ".*/.*" <<< $DIRENT_aux`
+            let suma=$espacios+$guiones+$barras
         done
         if [ ! $DIRENT_aux = "^$" ]
         then
@@ -189,16 +219,26 @@ then
         echo Defina el nombre del directorio para los archivos rechazados \(actualmente es $DIRRECH, si quiere usarlo presione ENTER sin escribir nada\):
         echo -e "INF-$(date +"%Y/%m/%d %T")-Se le solicita el directorio de archivos rechazados al usuario" >> "$GRUPO/sisop/sotp1.log"
         read DIRRECH_aux
-        while [[ ($DIRRECH_aux = "original") || ($DIRRECH_aux = "sisop") || ($DIRRECH_aux = "tp1datos") || ($DIRRECH_aux = "misdatos") || ($DIRRECH_aux = "mispruebas") || ($DIRRECH_aux = $DIRBIN) || ($DIRRECH_aux = $DIRMAE) || ($DIRRECH_aux = $DIRENT) || ($DIRRECH_aux = $DIRPROC) || ($DIRRECH_aux = $DIRSAL) || ($DIRRECH_aux = "Grupo1") ]]
+        espacios=`grep -c ".* .*" <<< $DIRRECH_aux`
+        guiones=`grep -c ".*-.*" <<< $DIRRECH_aux`
+        barras=`grep -c ".*/.*" <<< $DIRRECH_aux`
+        let suma=$espacios+$guiones+$barras
+        while [[ ($DIRRECH_aux = "original") || ($DIRRECH_aux = "sisop") || ($DIRRECH_aux = "tp1datos") || ($DIRRECH_aux = "misdatos") || ($DIRRECH_aux = "mispruebas") || ($DIRRECH_aux = $DIRBIN) || ($DIRRECH_aux = $DIRMAE) || ($DIRRECH_aux = $DIRENT) || ($DIRRECH_aux = $DIRPROC) || ($DIRRECH_aux = $DIRSAL) || ($DIRRECH_aux = "Grupo1") || ($suma -gt 0) ]]
         do
             echo -e "ERR-$(date +"%Y/%m/%d %T")-El valor $DIRRECH_aux ingresado para el directorio de archivos rechazados es erroneo. Se solicita otro nombre al usuario" >> "$GRUPO/sisop/sotp1.log"
             if [[ ($DIRRECH_aux = "original") || ($DIRRECH_aux = "sisop") || ($DIRRECH_aux = "tp1datos") || ($DIRRECH_aux = "misdatos") || ($DIRRECH_aux = "mispruebas") || ($DIRRECH_aux = "Grupo1") ]]
             then
                 echo $DIRRECH_aux es un valor reservado. Defina el nombre del directorio para los archivos rechazados \(actualmente es $DIRRECH, si quiere usarlo presione ENTER sin escribir nada\):
+            elif [ $suma -gt 0 ]; then
+                echo "$DIRRECH_aux contiene caracteres invalidos (no se pueden usar espacios, guiones medios o barras como /). Defina el nombre del directorio de rechazados \(actualmente es $DIRRECH, si quiere usarlo presione enter sin escribir nada\):"
             else
                 echo $DIRRECH_aux ya ha sido usado para otro directorio. Defina el nombre del directorio para los archivos rechazados \(actualmente es $DIRRECH, si quiere usarlo presione ENTER sin escribir nada\):
             fi
             read DIRRECH_aux
+            espacios=`grep -c ".* .*" <<< $DIRRECH_aux`
+            guiones=`grep -c ".*-.*" <<< $DIRRECH_aux`
+            barras=`grep -c ".*/.*" <<< $DIRRECH_aux`
+            let suma=$espacios+$guiones+$barras
         done
         if [ ! $DIRRECH_aux = "^$" ]
         then
@@ -209,16 +249,26 @@ then
         echo Defina el nombre del directorio de lotes ya procesados \(actualmente es $DIRPROC, si quiere usarlo presione ENTER sin escribir nada\):
         echo -e "INF-$(date +"%Y/%m/%d %T")-Se le solicita el directorio de lotes al usuario" >> "$GRUPO/sisop/sotp1.log"
         read DIRPROC_aux
-        while [[ ($DIRPROC_aux = "original") || ($DIRPROC_aux = "sisop") || ($DIRPROC_aux = "tp1datos") || ($DIRPROC_aux = "misdatos") || ($DIRPROC_aux = "mispruebas") || ($DIRPROC_aux = $DIRBIN) || ($DIRPROC_aux = $DIRMAE) || ($DIRPROC_aux = $DIRENT) || ($DIRPROC_aux = $DIRRECH) || ($DIRPROC_aux = $DIRSAL) || ($DIRPROC_aux = "Grupo1") ]]
+        espacios=`grep -c ".* .*" <<< $DIRPROC_aux`
+        guiones=`grep -c ".*-.*" <<< $DIRPROC_aux`
+        barras=`grep -c ".*/.*" <<< $DIRPROC_aux`
+        let suma=$espacios+$guiones+$barras
+        while [[ ($DIRPROC_aux = "original") || ($DIRPROC_aux = "sisop") || ($DIRPROC_aux = "tp1datos") || ($DIRPROC_aux = "misdatos") || ($DIRPROC_aux = "mispruebas") || ($DIRPROC_aux = $DIRBIN) || ($DIRPROC_aux = $DIRMAE) || ($DIRPROC_aux = $DIRENT) || ($DIRPROC_aux = $DIRRECH) || ($DIRPROC_aux = $DIRSAL) || ($DIRPROC_aux = "Grupo1") || ($suma -gt 0) ]]
         do
             echo -e "ERR-$(date +"%Y/%m/%d %T")-El valor $DIRPROC_aux ingresado para el directorio de lotes es erroneo. Se solicita otro nombre al usuario" >> "$GRUPO/sisop/sotp1.log"
             if [[ ($DIRPROC_aux = "original") || ($DIRPROC_aux = "sisop") || ($DIRPROC_aux = "tp1datos") || ($DIRPROC_aux = "misdatos") || ($DIRPROC_aux = "mispruebas") || ($DIRPROC_aux = "Grupo1") ]]
             then
                 echo $DIRPROC_aux es un valor reservado. Defina el nombre del directorio de lotes ya procesados \(actualmente es $DIRPROC, si quiere usarlo presione ENTER sin escribir nada\):
+            elif [ $suma -gt 0 ]; then
+                echo "$DIRPROC_aux contiene caracteres invalidos (no se pueden usar espacios, guiones medios o barras como /). Defina el nombre del directorio de procesados \(actualmente es $DIRPROC, si quiere usarlo presione enter sin escribir nada\):"
             else
                 echo $DIRPROC_aux ya ha sido usado para otro directorio. Defina el nombre del directorio de lotes ya procesados \(actualmente es $DIRPROC, si quiere usarlo presione ENTER sin escribir nada\):
             fi
             read DIRPROC_aux
+            espacios=`grep -c ".* .*" <<< $DIRPROC_aux`
+            guiones=`grep -c ".*-.*" <<< $DIRPROC_aux`
+            barras=`grep -c ".*/.*" <<< $DIRPROC_aux`
+            let suma=$espacios+$guiones+$barras
         done
         if [ ! $DIRPROC_aux = "^$" ]
         then
@@ -229,16 +279,26 @@ then
         echo Defina el nombre del directorio de resultados \(actualmente es $DIRSAL, si quiere usarlo presione ENTER sin escribir nada\):
         echo -e "INF-$(date +"%Y/%m/%d %T")-Se le solicita el directorio de resultados al usuario" >> "$GRUPO/sisop/sotp1.log"
         read DIRSAL_aux
-        while [[ ($DIRSAL_aux = "original") || ($DIRSAL_aux = "sisop") || ($DIRSAL_aux = "tp1datos") || ($DIRSAL_aux = "misdatos") || ($DIRSAL_aux = "mispruebas") || ($DIRSAL_aux = $DIRBIN) || ($DIRSAL_aux = $DIRMAE) || ($DIRSAL_aux = $DIRENT) || ($DIRSAL_aux = $DIRRECH) || ($DIRSAL_aux = $DIRPROC) || ($DIRSAL_aux = "Grupo1") ]]
+        espacios=`grep -c ".* .*" <<< $DIRSAL_aux`
+        guiones=`grep -c ".*-.*" <<< $DIRSAL_aux`
+        barras=`grep -c ".*/.*" <<< $DIRSAL_aux`
+        let suma=$espacios+$guiones+$barras
+        while [[ ($DIRSAL_aux = "original") || ($DIRSAL_aux = "sisop") || ($DIRSAL_aux = "tp1datos") || ($DIRSAL_aux = "misdatos") || ($DIRSAL_aux = "mispruebas") || ($DIRSAL_aux = $DIRBIN) || ($DIRSAL_aux = $DIRMAE) || ($DIRSAL_aux = $DIRENT) || ($DIRSAL_aux = $DIRRECH) || ($DIRSAL_aux = $DIRPROC) || ($DIRSAL_aux = "Grupo1") || ($suma -gt 0) ]]
         do
             echo -e "ERR-$(date +"%Y/%m/%d %T")-El valor $DIRSAL_aux ingresado para el directorio de resultados es erroneo. Se solicita otro nombre al usuario" >> "$GRUPO/sisop/sotp1.log"
             if [[ ($DIRSAL_aux = "original") || ($DIRSAL_aux = "sisop") || ($DIRSAL_aux = "tp1datos") || ($DIRSAL_aux = "misdatos") || ($DIRSAL_aux = "mispruebas") || ($DIRSAL_aux = "Grupo1") ]]
             then
                 echo $DIRSAL_aux es un valor reservado. Defina el nombre del directorio de resultados \(actualmente es $DIRSAL, si quiere usarlo presione ENTER sin escribir nada\):
+            elif [ $suma -gt 0 ]; then
+                echo "$DIRSAL_aux contiene caracteres invalidos (no se pueden usar espacios, guiones medios o barras como /). Defina el nombre del directorio de salida \(actualmente es $DIRSAL, si quiere usarlo presione enter sin escribir nada\):"
             else
                 echo $DIRSAL_aux ya ha sido usado para otro directorio. Defina el nombre del directorio de resultados \(actualmente es $DIRSAL, si quiere usarlo presione ENTER sin escribir nada\):
             fi
             read DIRSAL_aux
+            espacios=`grep -c ".* .*" <<< $DIRSAL_aux`
+            guiones=`grep -c ".*-.*" <<< $DIRSAL_aux`
+            barras=`grep -c ".*/.*" <<< $DIRSAL_aux`
+            let suma=$espacios+$guiones+$barras
         done
         if [ ! $DIRSAL_aux = "^$" ]
         then
@@ -316,7 +376,7 @@ then
         fi
     done
     echo
-    echo INSTALACION FINALIZADA
+    echo INSTALACION REALIZADA CORRECTAMENTE
     echo -e "INF-$(date +"%Y/%m/%d %T")-Instalacion finalizada" >> "$GRUPO/sisop/sotp1.log"
     echo
 else
@@ -362,6 +422,7 @@ else
         if [ $? -eq 1 ]
         then
             echo No se puede reparar el programa ya que faltan archivos del directorio original, por favor descargue el programa nuevamente.
+            echo -e "INF-$(date +"%Y/%m/%d %T")-Error irreparable, faltan archivos de la carpeta original y no se puede reparar" >> "$GRUPO/sisop/sotp1.log"
         else
             clear
             echo -e "INF-$(date +"%Y/%m/%d %T")-Se le muestra los directorios ingresados al usuario y se pide confirmacion de reparacion" >> "$GRUPO/sisop/sotp1.log"
@@ -389,7 +450,7 @@ else
             done
             if [ $choice = 'NO' ]
             then
-                echo Ha decidido no aceptar los directorios para la reparacion.
+                echo Ha decidido no aceptar los directorios para la reparacion. Finalizando la ejecucion...
 
             else
                 echo -e "INF-$(date +"%Y/%m/%d %T")-El usuario confirmo los directorios. Comenzando la reparacion" >> "$GRUPO/sisop/sotp1.log"
@@ -468,6 +529,9 @@ else
                 fi
 
                 echo -e "REPARACION-$(date +"%Y/%m/%d %T")-$USER" >> "$GRUPO/sisop/sotp1.conf"
+                echo
+                echo REPARACION COMPLETADA EXITOSAMENTE
+                echo -e "INF-$(date +"%Y/%m/%d %T")-Reparacion exitosa" >> "$GRUPO/sisop/sotp1.log"
             fi
         fi
     fi

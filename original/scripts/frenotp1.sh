@@ -1,5 +1,5 @@
 if [ ! -z "$TP_IN_EJEC" ]; then
-    kill -9 $TP_IN_EJEC
+    kill -- -$TP_IN_EJEC
     echo "INF-$(date +"%Y/%m/%d %T")-Se detuvo el proceso principal con pid $TP_IN_EJEC" >> "../sisop/frenotp1.log"
     echo "Se detuvo el proceso principal con pid $TP_IN_EJEC detenido correctamente"
     TP_IN_EJEC=""
