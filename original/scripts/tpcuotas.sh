@@ -33,7 +33,7 @@ chequear_novedades(){
 verificar_archivo(){
 
 	#debug file_validation "--- Validación de $1 ---" 
-
+    arch=$1
 	# Verificación del nombre
 	result=$(echo $1 | grep "Lote[0-9]\{5\}_[0-9]\{2\}" | sed 's/.*/OK/g' )
 	if [ ! ${result:-"NOT_OK"} = "OK" ]; then
@@ -46,25 +46,36 @@ verificar_archivo(){
     if [ ! ${result:-"OK"} != "DUPLICADO" ]
     then
         echo -e "WAR-$(date +"%Y/%m/%d %T")-Se rechazo el archivo $1 por ser duplicado" >> "$DIRCONF/tpcuotas.log"
+        return 0
     fi
 
     result=$(ls $DIRENT/ok | grep $1 | sed 's/.*/DUPLICADO/g' )
     if [ ! ${result:-"OK"} != "DUPLICADO" ]
     then
         echo -e "WAR-$(date +"%Y/%m/%d %T")-Se rechazo el archivo $1 por ser duplicado" >> "$DIRCONF/tpcuotas.log"
+        return 0
     fi
 
 	# Filtro de archivos vacíos
 	result=$( cat $DIRENT/$1 | grep -c -m 1 '.*' )
-	if [ ! $result -ne 0 ]; then
+    if [ ! $result -ne 0 ]; then
 		echo -e "WAR-$(date +"%Y/%m/%d %T")-Se rechazo el archivo $1 por estar vacio" >> "$DIRCONF/tpcuotas.log"
+        return 0
 	fi
 
 	# Filtro de tipo de archivo 
 	result=$( file $DIRENT/$1 | grep "$DIRENT/$1.*text.*" | sed 's/.*/OK/g' )
 	if [ ! ${result:-"NOT_OK"} = "OK" ]; then
 		echo -e "WAR-$(date +"%Y/%m/%d %T")-Se rechazo el archivo $1 por no ser un archivo de texto" >> "$DIRCONF/tpcuotas.log"
+        return 0
 	fi
+
+    result=${arch:4:5}
+    result=`grep -c "$result,.*" "$DIRMAE/terminales.txt"`
+    if [ $result -eq 0 ]; then
+        echo -e "WAR-$(date +"%Y/%m/%d %T")-Se rechazo el archivo $1 porque no existe el codigo de comercio" >> "$DIRCONF/tpcuotas.log"
+        return 0
+    fi
 
 	return 1
 }
