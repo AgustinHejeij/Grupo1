@@ -196,7 +196,7 @@
   Lo cual para realizar estas pruebas como tienen archivos con nombres distintos podes pasar todos esos lotes a la
   carpeta del directorio donde se tiene **DIRENT**, ejecutar el inicializador que abrira el proceso principal y el mismo
   procesará todos estos casos y los enviará a la carpeta de procesados en el caso de transacciones correctas y para los
-  casos que agregamos que contienen errores se verá tanto por pantalla como por el log de ejecución. 
+  casos que agregamos que contienen errores se verá por el log de la ejecución. 
   
   De este modo quedan por mostrados los casos de errores que pueden estar y porque suceden, y tambien casos donde hay
   transacciones correctas con distintos montos y cuotas. Ahora explicaremos paso a paso.
