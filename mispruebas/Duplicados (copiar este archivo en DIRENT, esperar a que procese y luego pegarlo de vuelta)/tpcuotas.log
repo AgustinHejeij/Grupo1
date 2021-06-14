@@ -1,0 +1,7 @@
+INF-2021/06/14 15:29:15-Voy por el ciclo 1
+INF-2021/06/14 15:29:15-Se mueve Lote10105_50 a /home/osboxes/Downloads/Grupo1/ENTRADATP/ok
+INF-2021/06/14 15:29:15-Se termino de procesar el archivo Lote10105_50, 1 registros leidos, 0 registros rechazados, 1 registros grabados
+INF-2021/06/14 15:29:15-Se movio el archivo Lote10105_50 a /home/osboxes/Downloads/Grupo1/lotes correctamente
+INF-2021/06/14 15:30:15-Voy por el ciclo 2
+WAR-2021/06/14 15:30:15-Se rechazo el archivo Lote10105_50 por ser duplicado
+INF-2021/06/14 15:30:15-Se mueve Lote10105_50 a /home/osboxes/Downloads/Grupo1/rechazos
