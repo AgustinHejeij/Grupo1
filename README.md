@@ -170,7 +170,7 @@
 
       cd $GRUPO1/bin
 
-  b) Ejecutar el script llamado "frenotp.sh"
+  b) Ejecutar el script llamado "frenotp1.sh"
 
       . ./frenotp1.sh
 
@@ -183,7 +183,7 @@
 
       cd $GRUPO1/bin
 
-  b) Ejecutar el script llamado "arrancotp.sh"
+  b) Ejecutar el script llamado "arrancotp1.sh"
 
       . ./arrancotp1.sh
 
@@ -198,6 +198,8 @@
   procesará todos estos casos y los enviará a la carpeta de procesados en el caso de transacciones correctas y para los
   casos que agregamos que contienen errores se verá por el log de la ejecución. 
   
+  Por otro lado, si se quiere ir evaluando cada archivo por separado, lo cual es mas conveniente, se puede ir copiando el archivo de cada caso en el directorio de entrada (ENTRADATP por defecto) y validar la informacion.
+  
   De este modo quedan por mostrados los casos de errores que pueden estar y porque suceden, y tambien casos donde hay
   transacciones correctas con distintos montos y cuotas. Ahora explicaremos paso a paso.
   
@@ -206,19 +208,23 @@
 
   a) Asegurar que el mismo este correctamente instalado e inicializado.
 
-  b) Iniciar el proceso principal, ya sea mediante el incializador (4.2) o el script arrancotp.sh (4.4).
+  b) Iniciar el proceso principal, ya sea mediante el incializador (4.2) o el script arrancotp1.sh (4.4).
 
-  c) Depositar uno o varios archivos en la carpeta elegida para la entrada del programa (por defecto DIRENT)
+  c) Depositar uno o varios archivos en la carpeta elegida para la entrada del programa (por defecto ENTRADATP)
 
-  d) Se puede observar como se irán clasificando según si fueron aceptados o no en las carpetas corresponidentes (por defecto DIRENT/ok ó DIRRECH).
+  d) Se puede observar como se irán clasificando según si fueron aceptados o no en las carpetas corresponidentes (por defecto ENTRADATP/ok ó rechazos).
 
   c) Los archivos aceptados son procesados de a uno.
 
-  e) Se puede observar como los archivos ya procesados son movidos a la carpeta elegida para los archivos de salida (por defecto DIRSAL)
+  e) Se puede observar como los archivos ya procesados son movidos a la carpeta elegida para los lotes procesados (por defecto lotes)
+  
+  f) Por otro lado, en el directorio de salida (SALIDATP por defecto) se pueden ver las liquidaciones de cada comercio, según qué registros fueron aceptados.
+  
+  g) En el directorio de rechazos (rechazos por defecto), si el lote contaba con registros inválidos, se puede observar una carpeta con el código del comercio, y dentro un archivo transacciones.rech en el que detalla el motivo del rechazo de los registros de cada lote.
 
-  f) Para obtener detalles de la clasificación, validación y procesamiento, se consulta el archivo del log tpcuotas.log.
+  h) Para obtener detalles de la clasificación, validación y procesamiento, se consulta el archivo del log tpcuotas.log.
 
-  g) Una vez finalizado todo el procesamiento de las pruebas, se puede frenar el programa con el script frenotp.sh (4.3)
+  i) Una vez finalizado todo el procesamiento de las pruebas, se puede frenar el programa con el script frenotp1.sh (4.3)
 
-  h) Cuando se quiera abandonar la sesión y borrar el ambiente del programa, se puede cerrar la terminal.
+  j) Cuando se quiera abandonar la sesión y borrar el ambiente del programa, se puede cerrar la terminal.
 
