@@ -31,10 +31,10 @@
   se pasa a la ejecución del script de instalación **sotp1.sh**, que se encuentra en la carpeta **sisop**. Para
   la ejecución del mismo se debe hacer:
   
-  a) Abrir la terminal
-  b) Ir hasta la carpeta donde esta el script de instalación: 
+  a) Abrir la terminal y navegar hasta la carpeta donde se realizó la descarga
+  b) Tipear: 
   
-    cd $GRUPO/sisop
+    cd sisop
   
   c) Ejecutar el script de instalación:
   
@@ -78,7 +78,7 @@
     - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRSAL)        
 
 ### 2.2 Directorios definidos
-  Si se quieren ver todos los directorios definidos se deberá navegar hasta el directorio $GRUPO (directorio donde se descargó el programa) y tipear:
+  Si se quieren ver todos los directorios definidos se deberá navegar desde la terminal hasta el directorio $GRUPO (directorio donde se descargó el programa) y tipear:
   
     cd  sisop
     cat  sotp1.conf
@@ -87,7 +87,7 @@
   
 ### 2.3 Log de instalación
   También se cuenta con un archivo de log, donde cada línea refleja lo que va sucediendo en el flujo de la instalación,
-  se puede encontrar desde información, warnings y errores. Para ello debe navergar hasta el directorio donde se descargó el programa y tipear:
+  se puede encontrar desde información, warnings y errores. Para ello debe navergar desde la terminal hasta el directorio donde se descargó el programa y tipear:
   
     cd sisop
     more sotp1.log
@@ -99,8 +99,7 @@
   El sistema de la reparación sirve justamtente para cuando surge algun error en algun otro script, se ejecute esto y se reparen
   esos errores para que el programa pueda ser ejecutado nuevamente de forma correcta.
   
-  Una vez que se está en la terminal, se deben dirigir hacia el directorio donde se descargó el programa y ejecutar el script de instalación como fue explicado
-  en la sección de instalación. 
+  Una vez que se está en la terminal, se deben dirigir desde la terminal hacia el directorio donde se descargó el programa y ejecutar el script de instalación como fue explicado en la sección de instalación. 
   
   No hace falta pasarle nada al script ya que el mismo se da cuenta cuando hay errores en los archivos o en los directorios y los soluciona.
   Además de eso queda todo registrado en el archivo de log de instalación pero avisando que lo que se hizo fue una reparación e indica
@@ -114,7 +113,9 @@
   Para la ejecución del programa, primero lo que se necesita es que el ambiente quede bien definido y para que esto
   suceda se deberá ejecutar lo siguiente
   
-  a) Navegar hasta el directorio donde se realizó la descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
+  a) Navegar en la terminal hasta el directorio donde se realizó la descarga
+  
+  b) Tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
   
     cd bin
   
@@ -158,9 +159,9 @@
   Y misma forma de navegación que mencionamos antes.
 
 ### 4.3 Detención manual
-  Como se explicó en la sección de inicialización, el programa principal comienza a correr en segundo plano automáticamente, por lo que estará buscando y procesando novedades   indefinidamente. Si se quiere pausar la ejecución, entonces se debe realizar lo siguiente:
+  Como se explicó en la sección de inicialización, el programa principal comienza a correr en segundo plano automáticamente, por lo que estará buscando y procesando novedades indefinidamente. Si se quiere pausar la ejecución, entonces se debe realizar lo siguiente:
 
-  a) Navegar hacia el directorio de descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
+  a) Navegar en la terminal hacia el directorio de descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
 
       cd bin
 
@@ -173,7 +174,7 @@
 ### 4.4 Reanudación manual
   En caso que se desee reanudar el proceseso principal, se debe ejecutar el script correspondiente:
 
-  a) Navegar hacia el directorio de descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
+  a) Navegar desde la terminal hacia el directorio de descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
 
       cd bin
 
