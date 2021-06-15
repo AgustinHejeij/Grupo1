@@ -49,45 +49,47 @@
   
 ### 2.1 Qué deja la instalación?
   Una vez que se ejecuta el script de instalación se crea lo siguiente:
-  - **Carpeta bin**
+  - **Directorio de ejecutables**
  
     - Todos los scripts estarán en esta carpeta excepto el script de instalación que esta en la carpeta sisop.
-    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRBIN)
-  - **Carpeta master**
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRBIN), el nombre por defecto es bin.
+  - **Directorio de tablas maestras**
   
     - Acá se encuentran las tablas maestras.
-    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRMAE)
-  - **Carpeta ENTRADATP**
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRMAE), el nombre por defecto es master.
+  - **Directorio de novedades**
   
     - Aquí dentro se deberán agregar los lotes que se quieran procesar.
     - Contiene una subcarpeta dentro llamada **ok** donde estarán todas las novedades aceptadas, luego de procesarlas.
-    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRENT)
-  - **Carpeta rechazos**
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRENT), el nombre por defecto es ENTRADATP.
+  - **Directorio de rechazados**
   
     - Se van creando las carpetas para cada comercio donde dentro estará el archivo transacciones.rech, si es que el lote
       procesado tiene transacciones rechazadas.
-    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRRECH)      
-  - **Carpeta lotes**
+    - Se van agregando aquellos archivos que por algún motivo fueron rechazados.
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRRECH), el nombre por defecto es rechazos. 
+  - **Directorio de lotes procesados**
   
-    - Cada vez que se procese un lote, este irá a este directorio tal cual como estaba originalmente.
-    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRPROC) 
+    - Cada vez que se procese un lote aceptado, este irá a este directorio tal cual como estaba originalmente.
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRPROC), el nombre por defecto es 
   - **Carpeta SALIDATP**
   
     - Para cada comercio, se crea un archivo con todas las transacciones ya procesadas.
     - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRSAL)        
 
 ### 2.2 Directorios definidos
-  Si se quieren ver todos los directorios definidos se deberá hacer lo siguiente:
+  Si se quieren ver todos los directorios definidos se deberá navegar hasta el directorio $GRUPO (directorio donde se descargó el programa) y tipear:
   
+    cd  sisop
     cat  sotp1.conf
   
   Y mostrará en cada línea cada directorio definido asociado.
   
 ### 2.3 Log de instalación
   También se cuenta con un archivo de log, donde cada línea refleja lo que va sucediendo en el flujo de la instalación,
-  se puede encontrar desde información, warnings y errores. Para ello como se encuentra en la terminal se está en la carpeta 
-  "sisop" se debe hacer:
+  se puede encontrar desde información, warnings y errores. Para ello debe navergar hasta el directorio donde se descargó el programa y tipear:
   
+    cd sisop
     more sotp1.log
    
    Para ir leyendo este archivo se debe dar a "ENTER" para ir linea por linea o darle a "ESPACIO" si se quiere avanzar de a más
@@ -97,7 +99,7 @@
   El sistema de la reparación sirve justamtente para cuando surge algun error en algun otro script, se ejecute esto y se reparen
   esos errores para que el programa pueda ser ejecutado nuevamente de forma correcta.
   
-  Una vez que se está en la terminal, se deben dirigir hacia la carpeta de "sisop" y ejecutar el script de instalación como fue explicado
+  Una vez que se está en la terminal, se deben dirigir hacia el directorio donde se descargó el programa y ejecutar el script de instalación como fue explicado
   en la sección de instalación. 
   
   No hace falta pasarle nada al script ya que el mismo se da cuenta cuando hay errores en los archivos o en los directorios y los soluciona.
@@ -112,15 +114,11 @@
   Para la ejecución del programa, primero lo que se necesita es que el ambiente quede bien definido y para que esto
   suceda se deberá ejecutar lo siguiente
   
-  a) Como se está en el directorio $GRUPO/sisop, se debe volver al inicio
-  
-    cd ..
-  
-  b) Luego ir hasta la carpeta donde se encuentran todos los ejecutables (carpeta bin por default)
+  a) Navegar hasta el directorio donde se realizó la descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
   
     cd bin
   
-  c) Ejecutar el script soinit.sh
+  c) Y luego ejecutar el script soinit.sh de la siguiente manera
   
     . ./soinit.sh
   
@@ -129,14 +127,9 @@
   programa principal no pueda ejecutarse, se lanza el programa y queda funcionando en segundo plano. (Nota: para detención y reanudación manual ver 4.3 y 4.4)
   
 #### 4.1.1 Log de inicialización
-  Cada línea que antes mencionamos aparece en un archivo de log. Para ello como se encuentra en la terminal se está en la carpeta 
-  "bin" se debe hacer:
+  Cada línea que antes mencionamos aparece en un archivo de log. :
   
-  a) Volver a la carpeta inicial
-  
-    cd ..
-  
-  b) Ir a la carpeta de sisop
+  a) Para ello desde la terminal debe navegar hasta el directorio donde se descargó el paquete y tipear
   
     cd sisop
   
@@ -151,14 +144,15 @@
   con un cierto formato de nombre que contiene por cada linea una transacción donde cada transacción tiene campos separados por comas ",".
   Estos archivos el programa los leerá por la carpeta seleccionada como el directorio de entrada (DIRENT), los procesará y luego enviará 
   al directorio de salida (DIRSAL) o al directorio de rechazados (DIRRECH) dependiendo del caso.
-  Tener en cuenta que si no se cumple el nombre del archivo, campos de las transacciones vacios o faltantes se considerá un error, y si
-  sucede eso, se mostrar en un archivo de log.
+  Si algún archivo aceptado contiene registros inválidos, se grabará en el directorio de rechazados un archivo transacciones.rech dentro de la carpeta correspondiente al comercio el registro rechazado, el motivo y el archivo de origen.
+  Si un archivo tiene un nombre o formato inválido por alguna razón, se envía a la carpeta de rechazados y se graba en el log el motivo del rechazo.
 
   
 #### 4.2.1 Log de ejecución del programa principal
   Sucede lo mismo que pasaba para los otros archivos de log, este mostrará lo que va sucediendo en el flujo del programa. Por ende, 
-  para ver esto, estando en la terminal en la carpeta "sisop" se debe hacer lo siguiente:
+  para ver esto, estando en la terminal debe navegar hacia el directorio de descarga y tipear:
   
+    cd sisop
     more tpcuotas.log
   
   Y misma forma de navegación que mencionamos antes.
@@ -166,11 +160,11 @@
 ### 4.3 Detención manual
   Como se explicó en la sección de inicialización, el programa principal comienza a correr en segundo plano automáticamente, por lo que estará buscando y procesando novedades   indefinidamente. Si se quiere pausar la ejecución, entonces se debe realizar lo siguiente:
 
-  a) Ir a la carpeta de ejectuables
+  a) Navegar hacia el directorio de descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
 
-      cd $GRUPO1/bin
+      cd bin
 
-  b) Ejecutar el script llamado "frenotp1.sh"
+  b) Ejecutar el script llamado "frenotp1.sh" de la siguiente forma:
 
       . ./frenotp1.sh
 
@@ -179,9 +173,9 @@
 ### 4.4 Reanudación manual
   En caso que se desee reanudar el proceseso principal, se debe ejecutar el script correspondiente:
 
-  a) Ir a la carpeta de ejectuables
+  a) Navegar hacia el directorio de descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
 
-      cd $GRUPO1/bin
+      cd bin
 
   b) Ejecutar el script llamado "arrancotp1.sh"
 
@@ -206,7 +200,7 @@
   #### 5.1 Efectuar una prueba completa
   Para poder probar por completo la funcionalidad del programa se puede seguir el siguiente flujo:
 
-  a) Asegurar que el mismo este correctamente instalado e inicializado.
+  a) Asegurar que el mismo este correctamente instalado.
 
   b) Iniciar el proceso principal, ya sea mediante el incializador (4.2) o el script arrancotp1.sh (4.4).
 
