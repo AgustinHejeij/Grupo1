@@ -31,7 +31,8 @@
   se pasa a la ejecución del script de instalación **sotp1.sh**, que se encuentra en la carpeta **sisop**. Para
   la ejecución del mismo se debe hacer:
   
-  a) Abrir la terminal y navegar hasta la carpeta donde se realizó la descarga
+  a) Abrir la terminal y navegar hasta la carpeta del grupo
+  
   b) Tipear: 
   
     cd sisop
@@ -71,14 +72,14 @@
   - **Directorio de lotes procesados**
   
     - Cada vez que se procese un lote aceptado, este irá a este directorio tal cual como estaba originalmente.
-    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRPROC), el nombre por defecto es 
-  - **Carpeta SALIDATP**
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRPROC), el nombre por defecto es lotes.
+  - **Directorio de salida**
   
     - Para cada comercio, se crea un archivo con todas las transacciones ya procesadas.
-    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRSAL)        
+    - Esta carpeta se crea a partir del directorio que se definió en la instalación (DIRSAL), el nombre por defecto es SALIDATP.     
 
 ### 2.2 Directorios definidos
-  Si se quieren ver todos los directorios definidos se deberá navegar desde la terminal hasta el directorio $GRUPO (directorio donde se descargó el programa) y tipear:
+  Si se quieren ver todos los directorios definidos se deberá navegar desde la terminal hasta el directorio del grupo ($GRUPO) y luego tipear:
   
     cd  sisop
     cat  sotp1.conf
@@ -87,7 +88,7 @@
   
 ### 2.3 Log de instalación
   También se cuenta con un archivo de log, donde cada línea refleja lo que va sucediendo en el flujo de la instalación,
-  se puede encontrar desde información, warnings y errores. Para ello debe navergar desde la terminal hasta el directorio donde se descargó el programa y tipear:
+  se puede encontrar desde información, warnings y errores. Para ello debe navergar desde la terminal hasta el directorio del grupo y luego tipear:
   
     cd sisop
     more sotp1.log
@@ -99,7 +100,7 @@
   El sistema de la reparación sirve justamtente para cuando surge algun error en algun otro script, se ejecute esto y se reparen
   esos errores para que el programa pueda ser ejecutado nuevamente de forma correcta.
   
-  Una vez que se está en la terminal, se deben dirigir desde la terminal hacia el directorio donde se descargó el programa y ejecutar el script de instalación como fue explicado en la sección de instalación. 
+  Una vez que se está en la terminal, se deben dirigir desde la terminal hacia el directorio del grupo y ejecutar el script de instalación como fue explicado en la sección de instalación. 
   
   No hace falta pasarle nada al script ya que el mismo se da cuenta cuando hay errores en los archivos o en los directorios y los soluciona.
   Además de eso queda todo registrado en el archivo de log de instalación pero avisando que lo que se hizo fue una reparación e indica
@@ -113,9 +114,9 @@
   Para la ejecución del programa, primero lo que se necesita es que el ambiente quede bien definido y para que esto
   suceda se deberá ejecutar lo siguiente
   
-  a) Navegar en la terminal hasta el directorio donde se realizó la descarga
+  a) Navegar en la terminal hasta el directorio del grupo
   
-  b) Tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
+  b) Moverse al directorio de ejecutables (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
   
     cd bin
   
@@ -130,18 +131,20 @@
 #### 4.1.1 Log de inicialización
   Cada línea que antes mencionamos aparece en un archivo de log. :
   
-  a) Para ello desde la terminal debe navegar hasta el directorio donde se descargó el paquete y tipear
+  a) Para ello desde la terminal debe navegar hasta el directorio del grupo
+  
+  b) Tipear
   
     cd sisop
   
-  c) Ver el archivo de log de inicialización
+  b) Ver el archivo de log de inicialización
   
     more soinit.log
    
    La forma de navegar es igual a la explicada para el archivo de log de instalación.
    
 ### 4.2 Programa principal
-  Una vez que se empieza a correr el programa principal (que se realiza en background), el mismo lo que hace es recibir archivos .txt
+  Una vez que se empieza a correr el programa principal (que se realiza en background), el mismo lo que hace es recibir archivos de texto
   con un cierto formato de nombre que contiene por cada linea una transacción donde cada transacción tiene campos separados por comas ",".
   Estos archivos el programa los leerá por la carpeta seleccionada como el directorio de entrada (DIRENT), los procesará y luego enviará 
   al directorio de salida (DIRSAL) o al directorio de rechazados (DIRRECH) dependiendo del caso.
@@ -151,7 +154,7 @@
   
 #### 4.2.1 Log de ejecución del programa principal
   Sucede lo mismo que pasaba para los otros archivos de log, este mostrará lo que va sucediendo en el flujo del programa. Por ende, 
-  para ver esto, estando en la terminal debe navegar hacia el directorio de descarga y tipear:
+  para ver esto, estando en la terminal debe navegar hacia el directorio del grupo y tipear:
   
     cd sisop
     more tpcuotas.log
@@ -161,7 +164,9 @@
 ### 4.3 Detención manual
   Como se explicó en la sección de inicialización, el programa principal comienza a correr en segundo plano automáticamente, por lo que estará buscando y procesando novedades indefinidamente. Si se quiere pausar la ejecución, entonces se debe realizar lo siguiente:
 
-  a) Navegar en la terminal hacia el directorio de descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
+  a) Navegar en la terminal hacia el directorio del grupo 
+  
+  b) Moverse al directorio de ejecutables (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
 
       cd bin
 
@@ -174,7 +179,9 @@
 ### 4.4 Reanudación manual
   En caso que se desee reanudar el proceseso principal, se debe ejecutar el script correspondiente:
 
-  a) Navegar desde la terminal hacia el directorio de descarga y tipear (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
+  a) Navegar desde la terminal hacia el directorio del grupo 
+  
+  b) Moverse al directorio de ejecutables (especificamos el valor por defecto, reemplazar bin por el nombre elegido en la instalación)
 
       cd bin
 
