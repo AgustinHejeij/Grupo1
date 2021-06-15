@@ -1,4 +1,11 @@
-WAR-2021/06/13 18:50:46-Faltan lo(s) registro(s) 0002 en el archivo Lote10102_06
-WAR-2021/06/13 18:50:48-Faltan lo(s) registro(s) 0002 en el archivo Lote10102_07
-WAR-2021/06/13 18:50:49-Faltan lo(s) registro(s) 0010 en el archivo Lote10102_07
-WAR-2021/06/13 18:50:49-Faltan lo(s) registro(s) 0012 0013 en el archivo Lote10102_07
+INF-2021/06/14 23:28:29-Voy por el ciclo 1
+INF-2021/06/14 23:28:29-Se acepto el archivo Lote10102_06. Se mueve a /home/renzo/Documents/Sisops/sotp1/ENTRADATP/ok
+INF-2021/06/14 23:28:29-Se acepto el archivo Lote10102_07. Se mueve a /home/renzo/Documents/Sisops/sotp1/ENTRADATP/ok
+WAR-2021/06/14 23:28:29-Faltan lo(s) registro(s) 0002 en el archivo Lote10102_06
+INF-2021/06/14 23:28:30-Se termino de procesar el archivo Lote10102_06, 10 registros leidos, 0 registros rechazados, 10 registros grabados
+INF-2021/06/14 23:28:30-Se movio el archivo Lote10102_06 a /home/renzo/Documents/Sisops/sotp1/lotes correctamente
+WAR-2021/06/14 23:28:30-Faltan lo(s) registro(s) 0002 en el archivo Lote10102_07
+WAR-2021/06/14 23:28:30-Faltan lo(s) registro(s) 0010 en el archivo Lote10102_07
+WAR-2021/06/14 23:28:30-Faltan lo(s) registro(s) 0012 0013 en el archivo Lote10102_07
+INF-2021/06/14 23:28:30-Se termino de procesar el archivo Lote10102_07, 10 registros leidos, 0 registros rechazados, 10 registros grabados
+INF-2021/06/14 23:28:30-Se movio el archivo Lote10102_07 a /home/renzo/Documents/Sisops/sotp1/lotes correctamente

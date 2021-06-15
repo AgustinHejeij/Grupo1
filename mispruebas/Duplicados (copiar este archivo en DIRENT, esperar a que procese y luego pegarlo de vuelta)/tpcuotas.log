@@ -1,7 +1,7 @@
-INF-2021/06/14 15:29:15-Voy por el ciclo 1
-INF-2021/06/14 15:29:15-Se mueve Lote10105_50 a /home/osboxes/Downloads/Grupo1/ENTRADATP/ok
-INF-2021/06/14 15:29:15-Se termino de procesar el archivo Lote10105_50, 1 registros leidos, 0 registros rechazados, 1 registros grabados
-INF-2021/06/14 15:29:15-Se movio el archivo Lote10105_50 a /home/osboxes/Downloads/Grupo1/lotes correctamente
-INF-2021/06/14 15:30:15-Voy por el ciclo 2
-WAR-2021/06/14 15:30:15-Se rechazo el archivo Lote10105_50 por ser duplicado
-INF-2021/06/14 15:30:15-Se mueve Lote10105_50 a /home/osboxes/Downloads/Grupo1/rechazos
+INF-2021/06/14 23:10:16-Voy por el ciclo 1
+INF-2021/06/14 23:10:16-Se acepto el archivo Lote10102_01. Se mueve a /home/renzo/Documents/Sisops/sotp1/ENTRADATP/ok
+INF-2021/06/14 23:10:17-Se termino de procesar el archivo Lote10102_01, 10 registros leidos, 0 registros rechazados, 10 registros grabados
+INF-2021/06/14 23:10:17-Se movio el archivo Lote10102_01 a /home/renzo/Documents/Sisops/sotp1/lotes correctamente
+INF-2021/06/14 23:11:17-Voy por el ciclo 2
+WAR-2021/06/14 23:11:17-Se rechazo el archivo Lote10102_01 por ser duplicado
+INF-2021/06/14 23:11:17-Se mueve Lote10102_01 a /home/renzo/Documents/Sisops/sotp1/rechazos
