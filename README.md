@@ -25,7 +25,8 @@
    
     Aquí dentro están los resultados de las ejecuciones de las pruebas, donde están divididos en subcarpetas 
     para cada caso contemplados.
-  Estos nombres de carpetas están reservados y no pueden ser utilizados, como así tambien Grupo1.
+    
+Estos nombres de carpetas están reservados y no pueden ser utilizados, como así tambien Grupo1.
   
 ## 2. Instalación
   Una vez que se tienen los archivos correspondientes y se encuentra en la carpeta donde estan dichos archivos, 
