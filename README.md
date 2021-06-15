@@ -4,6 +4,7 @@
   - Del repositorio descargar los archivos en formato .zip
   - Moverlos a la carpeta donde se quiera guardar
   - Descomprimir el .zip que se descargó en esa misma carpeta
+  - Renombrar la carpeta resultante a Grupo1
 
 ### 1.1 Qué deja la descarga?
   Te deja la carpeta Grupo1 donde adentro tiene las siguientes carpetas:
